@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lokyoh.hduspm.mapper.TaskMapper">
+    <select id="s_list" resultType="com.lokyoh.hduspm.entity.STask">
+        SELECT
+            t.id,
+            t.name,
+            t.description,
+            t.project_id,
+            p.name as project_name,
+            t.assigned_to,
+            cs.name as assigner,
+            t.due_date,
+            t.status,
+            tm.role,
+            tm.assigned_at,
+            tp.progress,
+            tp.description as progress_description
+        FROM tasks t
+        LEFT JOIN task_members tm ON tm.task_id = t.id
+        LEFT JOIN (
+            SELECT tp1.*
+            FROM task_progress tp1
+            WHERE tp1.update_at = (
+                SELECT MAX(tp2.update_at)
+                FROM task_progress tp2
+                WHERE tp2.task_id = tp1.task_id
+            )
+        ) tp ON tp.task_id = t.id
+        LEFT JOIN students cs ON cs.id = t.assigned_to
+        LEFT JOIN projects p ON p.id = t.project_id
+        JOIN students s ON s.id = tm.student_id
+        JOIN accounts a ON a.id = s.account_id
+        <where>
+            a.id=#{id}
+            <if test="name!=null and name!=''">
+                and t.name=#{name}
+            </if>
+            <if test="assignedTo!=null">
+                and t.assigned_to=#{assignedTo}
+            </if>
+            <if test="dueDate!=null">
+                and t.due_date=#{dueDate}
+            </if>
+            <if test="status!=null and status!=''">
+                and t.status=#{status}
+            </if>
+        </where>
+        ORDER BY t.created_at DESC
+    </select>
+</mapper>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lokyoh.hduspm.mapper.StudentMapper">
+    <insert id="addStudent">
+        insert into students (
+            account_id,
+            name,
+            student_id,
+            class_number,
+            email,
+            phone
+        )
+        value (
+            (select id from accounts where username = #{studentId}),
+            #{name},
+            #{studentId},
+            #{classNumber},
+            #{email},
+            #{phone}
+        )
+    </insert>
+    <select id="info" resultType="com.lokyoh.hduspm.entity.Student">
+        select
+            s.id,
+            s.account_id,
+            a.password,
+            s.name,
+            s.student_id,
+            s.class_number,
+            s.email,
+            s.phone,
+            a.created_at
+        from students s
+        join accounts a ON s.account_id = a.id
+        <where>
+            a.id=#{id}
+        </where>
+    </select>
+    <update id="changeInfo">
+        update accounts a
+        JOIN students s ON s.account_id = a.id
+        <set>
+            s.student_id=s.student_id
+            <if test="password!=null and password!=''">
+                , a.password=#{password}
+            </if>
+            <if test="classNumber!=null and classNumber!=''">
+                , s.class_number=#{classNumber}
+            </if>
+            <if test="email!=null and email!=''">
+                , s.email=#{email}
+            </if>
+            <if test="phone!=null and phone!=''">
+                , s.phone=#{phone}
+            </if>
+        </set>
+        <where>
+            a.id=#{accountId}
+        </where>
+    </update>
+</mapper>

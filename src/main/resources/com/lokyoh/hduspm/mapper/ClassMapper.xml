@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lokyoh.hduspm.mapper.ClassMapper">
+    <select id="s_list" resultType="com.lokyoh.hduspm.entity.Classes">
+        SELECT
+            c.id,
+            c.name,
+            c.teacher_id,
+            t.name AS teacher_name,
+            c.created_at
+        FROM classes c
+        JOIN teachers t ON c.teacher_id = t.id
+        JOIN student_classes sc ON class_id = c.id
+        JOIN students s ON s.id = sc.student_id
+        JOIN accounts a ON a.id = s.account_id
+        <where>
+            a.id=#{id}
+        </where>
+        ORDER BY c.created_at DESC
+    </select>
+</mapper>

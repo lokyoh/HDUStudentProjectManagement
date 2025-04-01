@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lokyoh.hduspm.mapper.ProjectMapper">
+    <select id="s_list" resultType="com.lokyoh.hduspm.entity.SProject">
+        SELECT
+            p.id,
+            p.name,
+            p.description,
+            p.creator_id,
+            cs.name AS creator_name,
+            p.status,
+            p.review_status,
+            p.class_id,
+            c.name AS class_name,
+            p.start_date,
+            p.end_date,
+            p.created_at,
+            pm.role
+        FROM projects p
+        JOIN project_members pm ON pm.project_id = p.id
+        JOIN students s ON pm.student_id = s.id
+        JOIN accounts a ON s.account_id = a.id
+        JOIN students cs ON p.creator_id = cs.id
+        JOIN classes c On p.class_id = c.id
+        <where>
+            a.id=#{id}
+            <if test="creatorId!=null">
+                and p.creator_id=#{creatorId}
+            </if>
+            <if test="classId!=null">
+                and p.class_id=#{classId}
+            </if>
+            <if test="status!=null and status!=''">
+                and p.status=#{status}
+            </if>
+            <if test="reviewStatus!=null and reviewStatus!=''">
+                and p.review_status=#{reviewStatus}
+            </if>
+        </where>
+        ORDER BY p.created_at DESC
+    </select>
+    <select id="s_p" resultType="com.lokyoh.hduspm.entity.ProjectMember">
+        SELECT pm.*
+        FROM project_members pm
+        JOIN students s ON pm.student_id = s.id
+        JOIN accounts a ON s.account_id = a.id
+        WHERE a.id=#{aId} and pm.project_id=#{id}
+    </select>
+    <select id="getProject" resultType="com.lokyoh.hduspm.entity.Project">
+        SELECT p.id,
+               p.name,
+               p.description,
+               p.creator_id,
+               s.name as creator_name,
+               p.class_id,
+               c.name as class_name,
+               p.status,
+               p.review_status,
+               p.start_date,
+               p.end_date
+        FROM projects p
+        JOIN students s ON p.creator_id = s.id
+        JOIN classes c ON p.class_id = c.id
+        WHERE p.id=#{id}
+    </select>
+</mapper>
