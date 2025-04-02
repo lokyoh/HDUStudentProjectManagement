@@ -1,8 +1,6 @@
 package com.lokyoh.hduspm.controller.StudentController;
 
-import com.lokyoh.hduspm.entity.PageBean;
-import com.lokyoh.hduspm.entity.SProject;
-import com.lokyoh.hduspm.entity.Result;
+import com.lokyoh.hduspm.entity.*;
 import com.lokyoh.hduspm.service.ProjectService;
 import com.lokyoh.hduspm.utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/student/project")
 @Component
-public class ProjectController {
+public class StudentProjectController {
     @Autowired
     private ProjectService projectService;
 
@@ -37,8 +35,27 @@ public class ProjectController {
         return Result.success(pb);
     }
 
-    @GetMapping("/get/{id}")
-    public Result<Object> get(@PathVariable Long id) {
-        return Result.success(projectService.getProject(id));
+    @PutMapping("/create")
+    public Result<Object> create(@RequestBody BaseProject project){
+        Map<String, Object> map = ThreadLocalUtil.get();
+        long id = Long.parseLong(map.get("id").toString());
+        project.setCreatorId(id);
+        projectService.create(project);
+        return Result.success();
+    }
+
+    @PutMapping("/change")
+    public Result<Object> change(@RequestBody BaseProject project){
+        Map<String, Object> map = ThreadLocalUtil.get();
+        long id = Long.parseLong(map.get("id").toString());
+        project.setCreatorId(id);
+        projectService.change(project);
+        return Result.success();
+    }
+
+    @PutMapping("/add")
+    public Result<Object> addStudent(@RequestParam Long pid, @RequestParam Long sid){
+        projectService.addStudent(pid, sid);
+        return Result.success();
     }
 }

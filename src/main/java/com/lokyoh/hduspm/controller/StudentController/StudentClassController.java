@@ -17,7 +17,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/student/class")
 @Component
-public class ClassController {
+public class StudentClassController {
     @Autowired
     private ClassService classService;
 

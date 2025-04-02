@@ -1,6 +1,8 @@
 package com.lokyoh.hduspm.mapper;
 
+import com.lokyoh.hduspm.entity.BaseProject;
 import com.lokyoh.hduspm.entity.Project;
+import com.lokyoh.hduspm.entity.ProjectMember;
 import com.lokyoh.hduspm.entity.SProject;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -11,4 +13,12 @@ public interface ProjectMapper {
     List<SProject> s_list(Long id, Long creatorId, Long classId, String status, String reviewStatus);
 
     Project getProject(Long id);
+
+    void create(BaseProject project);
+
+    void change(BaseProject project);
+
+    void addStudent(Long pId, Long sId);
+
+    List<ProjectMember> getProjectMembers(Long id);
 }

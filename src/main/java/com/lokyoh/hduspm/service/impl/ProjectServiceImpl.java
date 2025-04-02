@@ -2,14 +2,13 @@ package com.lokyoh.hduspm.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.lokyoh.hduspm.entity.PageBean;
-import com.lokyoh.hduspm.entity.Project;
-import com.lokyoh.hduspm.entity.SProject;
+import com.lokyoh.hduspm.entity.*;
 import com.lokyoh.hduspm.mapper.ProjectMapper;
 import com.lokyoh.hduspm.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -44,5 +43,40 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Project getProject(Long id) {
         return projectMapper.getProject(id);
+    }
+
+    /**
+     * @param project
+     */
+    @Override
+    public void create(BaseProject project) {
+        project.setStartDate(LocalDate.now());
+        projectMapper.create(project);
+    }
+
+    /**
+     * @param project
+     */
+    @Override
+    public void change(BaseProject project) {
+        projectMapper.change(project);
+    }
+
+    /**
+     * @param pId
+     * @param sId
+     */
+    @Override
+    public void addStudent(Long pId, Long sId) {
+        projectMapper.addStudent(pId, sId);
+    }
+
+    /**
+     * @param id
+     * @return
+     */
+    @Override
+    public List<ProjectMember> getProjectMembers(Long id) {
+        return projectMapper.getProjectMembers(id);
     }
 }

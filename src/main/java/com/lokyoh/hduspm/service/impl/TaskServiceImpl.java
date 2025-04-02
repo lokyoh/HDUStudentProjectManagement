@@ -2,6 +2,7 @@ package com.lokyoh.hduspm.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lokyoh.hduspm.entity.BaseTask;
 import com.lokyoh.hduspm.entity.PageBean;
 import com.lokyoh.hduspm.entity.STask;
 import com.lokyoh.hduspm.mapper.TaskMapper;
@@ -35,5 +36,30 @@ public class TaskServiceImpl implements TaskService {
         pb.setCount(p.getTotal());
         pb.setItems(p.getList());
         return pb;
+    }
+
+    /**
+     * @param task
+     */
+    @Override
+    public void create(BaseTask task) {
+        taskMapper.create(task);
+    }
+
+    /**
+     * @param task
+     */
+    @Override
+    public void change(BaseTask task) {
+        taskMapper.change(task);
+    }
+
+    /**
+     * @param tid
+     * @param sid
+     */
+    @Override
+    public void addStudent(Long tid, Long sid) {
+        taskMapper.addStudent(tid, sid);
     }
 }
