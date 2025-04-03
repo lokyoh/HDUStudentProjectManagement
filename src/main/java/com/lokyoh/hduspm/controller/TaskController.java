@@ -31,11 +31,9 @@ public class TaskController {
     ) {
         Map<String, Object> map = ThreadLocalUtil.get();
         long id = Long.parseLong(map.get("id").toString());
-        pageNum = pageNum == null ? 1 : pageNum;
-        pageSize = pageSize == null ? 10 : pageSize;
-        if (pageNum < 1) return Result.error("pageNum错误");
-        if (pageSize > 30 || pageSize < 1) return Result.error("pageSize错误");
-        PageBean<STask> pb = taskService.s_list(pageNum, pageSize, id, name, assignedTo, dueDate, status);
+        pageNum = pageNum == null || pageNum < 1 ? 1 : pageNum;
+        pageSize = pageSize == null || pageSize > 30 || pageSize < 1 ? 10 : pageSize;
+        PageBean<STask> pb = taskService.sList(pageNum, pageSize, id, name, assignedTo, dueDate, status);
         return Result.success(pb);
     }
 
@@ -51,9 +49,14 @@ public class TaskController {
         return Result.success();
     }
 
-    @PutMapping("/addStudent")
+    @PostMapping("/student/add")
     public Result<Object> addStudent(@RequestParam Long tid, Long sid){
         taskService.addStudent(tid, sid);
+        return Result.success();
+    }
+
+    @PostMapping("/progress/add")
+    public Result<Object> addProgress(@RequestParam Long id){
         return Result.success();
     }
 }

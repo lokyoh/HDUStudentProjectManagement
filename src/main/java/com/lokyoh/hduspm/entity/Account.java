@@ -23,4 +23,9 @@ public class Account {
         this.password = studentAccount.getPassword();
         this.role = "学生";
     }
+    public Account(TeacherAccount teacherAccount) {
+        this.username = teacherAccount.getTeacherId();
+        this.password = teacherAccount.getPassword();
+        this.role = "教师";
+    }
 }

@@ -1,10 +1,9 @@
 package com.lokyoh.hduspm.service.impl;
 
-import com.lokyoh.hduspm.entity.Account;
-import com.lokyoh.hduspm.entity.Student;
-import com.lokyoh.hduspm.entity.StudentAccount;
+import com.lokyoh.hduspm.entity.*;
 import com.lokyoh.hduspm.mapper.AccountMapper;
 import com.lokyoh.hduspm.mapper.StudentMapper;
+import com.lokyoh.hduspm.mapper.TeacherMapper;
 import com.lokyoh.hduspm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +15,8 @@ public class UserServiceImpl implements UserService {
     private AccountMapper accountMapper;
     @Autowired
     private StudentMapper studentMapper;
+    @Autowired
+    private TeacherMapper teacherMapper;
 
     /** 获取用户账户信息
      * @param username 用户账户名称
@@ -61,5 +62,32 @@ public class UserServiceImpl implements UserService {
     @Override
     public void sChangeInfo(Student student) {
         studentMapper.changeInfo(student);
+    }
+
+    /**
+     * @param id
+     * @return
+     */
+    @Override
+    public Teacher tInfo(Long id) {
+        return teacherMapper.info(id);
+    }
+
+    /**
+     * @param teacher
+     */
+    @Override
+    public void tChangeInfo(Teacher teacher) {
+        teacherMapper.changeInfo(teacher);
+    }
+
+    /**
+     * @param teacher
+     */
+    @Override
+    @Transactional
+    public void addTeacher(TeacherAccount teacher) {
+        accountMapper.addAccount(new Account(teacher));
+        teacherMapper.add(new Teacher(teacher));
     }
 }

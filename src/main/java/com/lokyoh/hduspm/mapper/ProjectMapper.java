@@ -10,7 +10,7 @@ import java.util.List;
 
 @Mapper
 public interface ProjectMapper {
-    List<SProject> s_list(Long id, Long creatorId, Long classId, String status, String reviewStatus);
+    List<SProject> sList(Long id, Long creatorId, Long classId, String status, String reviewStatus);
 
     Project getProject(Long id);
 

@@ -26,10 +26,10 @@ public class ProjectServiceImpl implements ProjectService {
      * @return 项目列表
      */
     @Override
-    public PageBean<SProject> s_list(int pageNum, int pageSize, Long id, Long creatorId, Long classId, String status, String reviewStatus) {
+    public PageBean<SProject> sList(int pageNum, int pageSize, Long id, Long creatorId, Long classId, String status, String reviewStatus) {
         PageBean<SProject> pb = new PageBean<>();
         PageHelper.startPage(pageNum, pageSize);
-        List<SProject> rs = projectMapper.s_list(id, creatorId, classId, status, reviewStatus);
+        List<SProject> rs = projectMapper.sList(id, creatorId, classId, status, reviewStatus);
         PageInfo<SProject> p = new PageInfo<>(rs);
         pb.setCount(p.getTotal());
         pb.setItems(p.getList());

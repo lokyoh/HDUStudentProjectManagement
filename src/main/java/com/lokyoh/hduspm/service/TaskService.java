@@ -7,7 +7,7 @@ import com.lokyoh.hduspm.entity.STask;
 import java.time.LocalDate;
 
 public interface TaskService {
-    PageBean<STask> s_list(Integer pageNum, Integer pageSize, Long id, String name, Long assignedTo, LocalDate dueDate, String status);
+    PageBean<STask> sList(Integer pageNum, Integer pageSize, Long id, String name, Long assignedTo, LocalDate dueDate, String status);
 
     void create(BaseTask task);
 

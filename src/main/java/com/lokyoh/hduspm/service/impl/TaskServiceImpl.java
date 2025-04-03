@@ -28,10 +28,10 @@ public class TaskServiceImpl implements TaskService {
      * @return
      */
     @Override
-    public PageBean<STask> s_list(Integer pageNum, Integer pageSize, Long id, String name, Long assignedTo, LocalDate dueDate, String status) {
+    public PageBean<STask> sList(Integer pageNum, Integer pageSize, Long id, String name, Long assignedTo, LocalDate dueDate, String status) {
         PageBean<STask> pb = new PageBean<>();
         PageHelper.startPage(pageNum, pageSize);
-        List<STask> rs = taskMapper.s_list(id, name, assignedTo, dueDate, status);
+        List<STask> rs = taskMapper.sList(id, name, assignedTo, dueDate, status);
         PageInfo<STask> p = new PageInfo<>(rs);
         pb.setCount(p.getTotal());
         pb.setItems(p.getList());

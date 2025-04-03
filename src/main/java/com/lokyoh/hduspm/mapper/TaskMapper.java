@@ -9,7 +9,7 @@ import java.util.List;
 
 @Mapper
 public interface TaskMapper {
-    List<STask> s_list(Long id, String name, Long assignedTo, LocalDate dueDate, String status);
+    List<STask> sList(Long id, String name, Long assignedTo, LocalDate dueDate, String status);
 
     void create(BaseTask task);
 

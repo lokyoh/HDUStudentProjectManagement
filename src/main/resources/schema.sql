@@ -33,6 +33,7 @@ CREATE TABLE teachers (
     id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '教师ID（唯一标识）',
     account_id BIGINT NOT NULL UNIQUE COMMENT '关联账号ID（唯一）',
     name VARCHAR(32) NOT NULL COMMENT '教师姓名',
+    teacher_id VARCHAR(32) NOT NULL COMMENT '教师号',
     email VARCHAR(64) NULL COMMENT '邮箱',
     phone VARCHAR(32) NULL COMMENT '电话',
     FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE

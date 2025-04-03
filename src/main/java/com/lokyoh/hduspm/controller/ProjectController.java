@@ -18,6 +18,7 @@ import java.util.Map;
 public class ProjectController {
     @Autowired
     private ProjectService projectService;
+
     @GetMapping("/student/list")
     public Result<PageBean<SProject>> list(
             @RequestParam(required = false) Integer pageNum,
@@ -31,11 +32,11 @@ public class ProjectController {
         Long id = Long.parseLong(map.get("id").toString());
         pageNum = pageNum == null || pageNum < 1 ? 1 : pageNum;
         pageSize = pageSize == null || pageSize > 30 || pageSize < 1 ? 10 : pageSize;
-        PageBean<SProject> pb = projectService.s_list(pageNum, pageSize, id, creatorId, classId, status, reviewStatus);
+        PageBean<SProject> pb = projectService.sList(pageNum, pageSize, id, creatorId, classId, status, reviewStatus);
         return Result.success(pb);
     }
 
-    @PutMapping("/create")
+    @PutMapping("/student/create")
     public Result<Object> create(@RequestBody BaseProject project){
         Map<String, Object> map = ThreadLocalUtil.get();
         long id = Long.parseLong(map.get("id").toString());
@@ -44,7 +45,7 @@ public class ProjectController {
         return Result.success();
     }
 
-    @PutMapping("/change")
+    @PutMapping("/student/change")
     public Result<Object> change(@RequestBody BaseProject project){
         Map<String, Object> map = ThreadLocalUtil.get();
         long id = Long.parseLong(map.get("id").toString());
@@ -53,7 +54,7 @@ public class ProjectController {
         return Result.success();
     }
 
-    @PutMapping("/addMember")
+    @PutMapping("/student/addMember")
     public Result<Object> addStudent(@RequestParam Long pid, @RequestParam Long sid){
         projectService.addStudent(pid, sid);
         return Result.success();

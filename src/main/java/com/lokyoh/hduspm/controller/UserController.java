@@ -50,6 +50,19 @@ public class UserController {
         return Result.success();
     }
 
+    @PutMapping("/admin/teacher/register")
+    public Result<Object> tRegister(@RequestBody TeacherAccount teacher) {
+        Account account = userService.getAccountByName(teacher.getTeacherId());
+        if (account != null)
+            return Result.error("该账号已经注册");
+        if (!ValidateUtil.checkPassword(teacher.getPassword()))
+            return Result.error("密码不符合要求");
+        if (!ValidateUtil.checkEmail(teacher.getEmail()))
+            return Result.error("邮箱不符合要求");
+        userService.addTeacher(teacher);
+        return Result.success();
+    }
+
     @PostMapping("/tokenCheck")
     public Result<Object> tokenCheck(String token) {
         try{
@@ -88,6 +101,37 @@ public class UserController {
         }
         student.setAccountId(id);
         userService.sChangeInfo(student);
+        return Result.success();
+    }
+
+    @GetMapping("/teacher/info")
+    public Result<Object> tInfo(){
+        Map<String, Object> map = ThreadLocalUtil.get();
+        long id = Long.parseLong(map.get("id").toString());
+        Teacher teacher = userService.tInfo(id);
+        teacher.setPassword(null);
+        return Result.success(teacher);
+    }
+
+    @PostMapping("/teacher/info/change")
+    public Result<Object> tChangeInfo(@RequestBody() Teacher teacher, @RequestParam(required = false) String p) {
+        Map<String, Object> map = ThreadLocalUtil.get();
+        long id = Long.parseLong(map.get("id").toString());
+        Teacher o_s = userService.tInfo(id);
+        String password = teacher.getPassword();
+        if (password!=null && !password.isEmpty()){
+            if (p==null || p.isEmpty()) return Result.error("请输入原密码");
+            if (!password.equals(o_s.getPassword())){
+                if(!ValidateUtil.checkPassword(password)) return Result.error("密码不符合规范");
+            }
+            if (!userService.checkPassword(id, p)) return Result.error("密码错误");
+        }
+        String email = teacher.getEmail();
+        if (email!=null && !email.isEmpty() && (!email.equals(o_s.getEmail()))){
+            if(!ValidateUtil.checkEmail(email)) return Result.error("邮箱不符合规范");
+        }
+        teacher.setAccountId(id);
+        userService.tChangeInfo(teacher);
         return Result.success();
     }
 }

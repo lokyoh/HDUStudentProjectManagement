@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lokyoh.hduspm.mapper.ProjectMapper">
-    <select id="s_list" resultType="com.lokyoh.hduspm.entity.SProject">
+    <select id="sList" resultType="com.lokyoh.hduspm.entity.SProject">
         SELECT
             p.id,
             p.name,
@@ -41,7 +41,7 @@
         </where>
         ORDER BY p.created_at DESC
     </select>
-    <select id="s_p" resultType="com.lokyoh.hduspm.entity.ProjectMember">
+    <select id="getProjectMembers" resultType="com.lokyoh.hduspm.entity.ProjectMember">
         SELECT pm.*
         FROM project_members pm
         JOIN students s ON pm.student_id = s.id

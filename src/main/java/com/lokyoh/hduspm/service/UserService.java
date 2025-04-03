@@ -1,8 +1,6 @@
 package com.lokyoh.hduspm.service;
 
-import com.lokyoh.hduspm.entity.Account;
-import com.lokyoh.hduspm.entity.Student;
-import com.lokyoh.hduspm.entity.StudentAccount;
+import com.lokyoh.hduspm.entity.*;
 
 public interface UserService {
     Account getAccountByName(String username);
@@ -14,4 +12,10 @@ public interface UserService {
     Student sInfo(long id);
 
     void sChangeInfo(Student student);
+
+    Teacher tInfo(Long id);
+
+    void tChangeInfo(Teacher teacher);
+
+    void addTeacher(TeacherAccount teacher);
 }
