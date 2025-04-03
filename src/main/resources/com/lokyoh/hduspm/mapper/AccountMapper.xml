@@ -11,9 +11,9 @@
     </select>
     <insert id="addAccount">
         insert into accounts (
-                              username,
-                              password,
-                              role
+            username,
+            password,
+            role
         )
             value (#{username}, #{password}, #{role})
     </insert>

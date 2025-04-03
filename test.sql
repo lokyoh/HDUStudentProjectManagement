@@ -9,8 +9,8 @@ VALUES (2, 'lokyoh', '21051431', '21052314', 'lokyoh@hotmail.com', '12112312312'
 INSERT INTO teachers (account_id, name, email, phone)
 VALUES (3, '张三', 'zhangsan@lokyoh.com', '12345678912');
 
-INSERT INTO classes (name, teacher_id)
-VALUES ('毕业设计S123', 1);
+INSERT INTO classes (name, teacher_id, semester)
+VALUES ('毕业设计S123', 1, '2025-1');
 
 INSERT INTO student_classes (student_id, class_id)
 VALUES (1,1);

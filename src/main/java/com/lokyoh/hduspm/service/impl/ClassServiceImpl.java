@@ -4,7 +4,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lokyoh.hduspm.entity.Classes;
 import com.lokyoh.hduspm.entity.PageBean;
-import com.lokyoh.hduspm.entity.SProject;
 import com.lokyoh.hduspm.mapper.ClassMapper;
 import com.lokyoh.hduspm.service.ClassService;
 import org.springframework.beans.factory.annotation.Autowired;

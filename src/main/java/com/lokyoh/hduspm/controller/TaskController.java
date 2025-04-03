@@ -1,4 +1,4 @@
-package com.lokyoh.hduspm.controller.StudentController;
+package com.lokyoh.hduspm.controller;
 
 import com.lokyoh.hduspm.entity.BaseTask;
 import com.lokyoh.hduspm.entity.PageBean;
@@ -14,7 +14,7 @@ import java.time.LocalDate;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/student/task")
+@RequestMapping("/task")
 @Component
 public class TaskController {
     @Autowired

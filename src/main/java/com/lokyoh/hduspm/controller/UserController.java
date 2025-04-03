@@ -1,8 +1,9 @@
 package com.lokyoh.hduspm.controller;
 
 import com.lokyoh.hduspm.entity.*;
-import com.lokyoh.hduspm.service.AccountService;
+import com.lokyoh.hduspm.service.UserService;
 import com.lokyoh.hduspm.utils.JwtUtil;
+import com.lokyoh.hduspm.utils.ThreadLocalUtil;
 import com.lokyoh.hduspm.utils.ValidateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,13 +15,13 @@ import java.util.Map;
 @RestController
 @RequestMapping
 @Component
-public class LoginController {
+public class UserController {
     @Autowired
-    private AccountService accountService;
+    private UserService userService;
 
     @PostMapping("/login")
     public Result<Object> login(String username, String password) {
-        Account account = accountService.getAccountByName(username);
+        Account account = userService.getAccountByName(username);
         if (account == null) {
             return Result.error("用户名错误");
         }
@@ -38,14 +39,14 @@ public class LoginController {
 
     @PutMapping("/register")
     public Result<Object> register(@RequestBody StudentAccount student) {
-        Account account = accountService.getAccountByName(String.valueOf(student.getStudentId()));
+        Account account = userService.getAccountByName(student.getStudentId());
         if (account != null)
             return Result.error("该账号已经注册");
         if (!ValidateUtil.checkPassword(student.getPassword()))
             return Result.error("密码不符合要求");
         if (!ValidateUtil.checkEmail(student.getEmail()))
             return Result.error("邮箱不符合要求");
-        accountService.addStudent(student);
+        userService.addStudent(student);
         return Result.success();
     }
 
@@ -57,5 +58,36 @@ public class LoginController {
         }catch (Exception e){
             return Result.error("token无效");
         }
+    }
+
+    @GetMapping("/student/info")
+    public Result<Object> sGetInfo() {
+        Map<String, Object> map = ThreadLocalUtil.get();
+        long id = Long.parseLong(map.get("id").toString());
+        Student student = userService.sInfo(id);
+        student.setPassword(null);
+        return Result.success(student);
+    }
+
+    @PostMapping("/student/info/change")
+    public Result<Object> sChangeInfo(@RequestBody() Student student, @RequestParam(required = false) String p) {
+        Map<String, Object> map = ThreadLocalUtil.get();
+        long id = Long.parseLong(map.get("id").toString());
+        Student o_s = userService.sInfo(id);
+        String password = student.getPassword();
+        if (password!=null && !password.isEmpty()){
+            if (p==null || p.isEmpty()) return Result.error("请输入原密码");
+            if (!password.equals(o_s.getPassword())){
+                if(!ValidateUtil.checkPassword(password)) return Result.error("密码不符合规范");
+            }
+            if (!userService.checkPassword(id, p)) return Result.error("密码错误");
+        }
+        String email = student.getEmail();
+        if (email!=null && !email.isEmpty() && (!email.equals(o_s.getEmail()))){
+            if(!ValidateUtil.checkEmail(email)) return Result.error("邮箱不符合规范");
+        }
+        student.setAccountId(id);
+        userService.sChangeInfo(student);
+        return Result.success();
     }
 }

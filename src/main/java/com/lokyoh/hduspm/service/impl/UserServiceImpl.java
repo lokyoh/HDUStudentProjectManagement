@@ -5,12 +5,13 @@ import com.lokyoh.hduspm.entity.Student;
 import com.lokyoh.hduspm.entity.StudentAccount;
 import com.lokyoh.hduspm.mapper.AccountMapper;
 import com.lokyoh.hduspm.mapper.StudentMapper;
-import com.lokyoh.hduspm.service.AccountService;
+import com.lokyoh.hduspm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class AccountServiceImpl implements AccountService {
+public class UserServiceImpl implements UserService {
     @Autowired
     private AccountMapper accountMapper;
     @Autowired
@@ -29,6 +30,7 @@ public class AccountServiceImpl implements AccountService {
      * @param student 学生信息
      */
     @Override
+    @Transactional
     public void addStudent(StudentAccount student) {
         accountMapper.addAccount(new Account(student));
         studentMapper.addStudent(new Student(student));
@@ -42,5 +44,22 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public boolean checkPassword(Long id, String p) {
         return accountMapper.getAccountById(id).getPassword().equals(p);
+    }
+
+    /**
+     * @param id
+     * @return
+     */
+    @Override
+    public Student sInfo(long id) {
+        return studentMapper.info(id);
+    }
+
+    /**
+     * @param student
+     */
+    @Override
+    public void sChangeInfo(Student student) {
+        studentMapper.changeInfo(student);
     }
 }
