@@ -78,7 +78,6 @@ public class UserController {
         Map<String, Object> map = ThreadLocalUtil.get();
         long id = Long.parseLong(map.get("id").toString());
         Student student = userService.sInfo(id);
-        student.setPassword(null);
         return Result.success(student);
     }
 
@@ -109,7 +108,6 @@ public class UserController {
         Map<String, Object> map = ThreadLocalUtil.get();
         long id = Long.parseLong(map.get("id").toString());
         Teacher teacher = userService.tInfo(id);
-        teacher.setPassword(null);
         return Result.success(teacher);
     }
 
@@ -132,6 +130,17 @@ public class UserController {
         }
         teacher.setAccountId(id);
         userService.tChangeInfo(teacher);
+        return Result.success();
+    }
+
+    @PostMapping("/user/info")
+    public Result<Object> uInfo(@RequestParam Long aid) {
+        return Result.success(userService.getUserInfo(aid));
+    }
+
+    @PostMapping("/admin/user/del")
+    public Result<Object> delUser(@RequestParam Long id) {
+        userService.delAccount(id);
         return Result.success();
     }
 }

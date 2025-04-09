@@ -3,15 +3,16 @@
         PUBLIC "-//mybatis//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lokyoh.hduspm.mapper.ProjectMapper">
-    <select id="sList" resultType="com.lokyoh.hduspm.entity.SProject">
+    <select id="sList" resultType="com.lokyoh.hduspm.entity.Project">
         SELECT
             p.id,
             p.name,
             p.description,
             p.creator_id,
             cs.name AS creator_name,
+            p.teacher_id,
+            t.name AS teacher_name,
             p.status,
-            p.review_status,
             p.class_id,
             c.name AS class_name,
             p.start_date,
@@ -24,6 +25,7 @@
         JOIN accounts a ON s.account_id = a.id
         JOIN students cs ON p.creator_id = cs.id
         JOIN classes c On p.class_id = c.id
+        JOIN teachers t ON p.teacher_id = t.id
         <where>
             a.id=#{id}
             <if test="creatorId!=null">
@@ -35,34 +37,50 @@
             <if test="status!=null and status!=''">
                 and p.status=#{status}
             </if>
-            <if test="reviewStatus!=null and reviewStatus!=''">
-                and p.review_status=#{reviewStatus}
-            </if>
         </where>
         ORDER BY p.created_at DESC
     </select>
     <select id="getProjectMembers" resultType="com.lokyoh.hduspm.entity.ProjectMember">
-        SELECT pm.*
+        SELECT pm.student_id, s.name, pm.role
         FROM project_members pm
         JOIN students s ON pm.student_id = s.id
-        JOIN accounts a ON s.account_id = a.id
-        WHERE a.id=#{aId} and pm.project_id=#{id}
+        WHERE pm.project_id=#{id}
     </select>
     <select id="getProject" resultType="com.lokyoh.hduspm.entity.Project">
-        SELECT p.id,
-               p.name,
-               p.description,
-               p.creator_id,
-               s.name as creator_name,
-               p.class_id,
-               c.name as class_name,
-               p.status,
-               p.review_status,
-               p.start_date,
-               p.end_date
+        SELECT
+            p.id,
+            p.name,
+            p.description,
+            p.creator_id,
+            s.name AS creator_name,
+            p.teacher_id,
+            t.name AS teacher_name,
+            p.status,
+            p.class_id,
+            c.name AS class_name,
+            p.start_date,
+            p.end_date,
+            p.created_at
         FROM projects p
         JOIN students s ON p.creator_id = s.id
         JOIN classes c ON p.class_id = c.id
+        LEFT JOIN teachers t ON p.teacher_id = t.id
         WHERE p.id=#{id}
     </select>
+    <select id="getRole" resultType="java.lang.String">
+        SELECT
+            pm.role
+        FROM project_members pm
+        JOIN students s ON pm.student_id = s.id
+        JOIN accounts a On s.account_id = a.id
+        WHERE pm.project_id=#{id} and a.id=#{uid}
+    </select>
+    <insert id="newProject">
+        insert into projects (name, description, creator_id, teacher_id, class_id, start_date) VALUES
+        (#{name}, #{description}, #{creatorId}, #{teacherId}, #{classId}, #{startDate})
+    </insert>
+    <insert id="addStudent">
+        insert into project_members (project_id, student_id, role) VALUES
+        (#{pid}, #{sid}, #{role})
+    </insert>
 </mapper>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lokyoh.hduspm.mapper.AnnouncementMapper">
+    <select id="list" resultType="com.lokyoh.hduspm.entity.Announcement">
+        select * from announcements
+        where status = 'published' and NOW() >= start_date and ( end_date is null or end_date >= NOW())
+        ORDER BY updated_at DESC
+    </select>
+</mapper>

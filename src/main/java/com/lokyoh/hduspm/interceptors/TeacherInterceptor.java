@@ -16,7 +16,7 @@ public class TeacherInterceptor implements HandlerInterceptor {
             return true;
         }
         Map<String, Object> claims = ThreadLocalUtil.get();
-        if (claims.get("role").equals("教师") || claims.get("role").equals("管理员")) return true;
+        if (claims.get("role").equals("teacher") || claims.get("role").equals("admin")) return true;
         response.setStatus(403);
         return false;
     }

@@ -1,9 +1,7 @@
 package com.lokyoh.hduspm.service.impl;
 
 import com.lokyoh.hduspm.entity.*;
-import com.lokyoh.hduspm.mapper.AccountMapper;
-import com.lokyoh.hduspm.mapper.StudentMapper;
-import com.lokyoh.hduspm.mapper.TeacherMapper;
+import com.lokyoh.hduspm.mapper.UserMapper;
 import com.lokyoh.hduspm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,11 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
-    private AccountMapper accountMapper;
-    @Autowired
-    private StudentMapper studentMapper;
-    @Autowired
-    private TeacherMapper teacherMapper;
+    private UserMapper userMapper;
 
     /** 获取用户账户信息
      * @param username 用户账户名称
@@ -24,7 +18,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public Account getAccountByName(String username) {
-        return accountMapper.getAccountByName(username);
+        return userMapper.getAccountByName(username);
     }
 
     /** 添加学生
@@ -33,8 +27,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void addStudent(StudentAccount student) {
-        accountMapper.addAccount(new Account(student));
-        studentMapper.addStudent(new Student(student));
+        userMapper.addAccount(new Account(student));
+        userMapper.addStudent(new Student(student));
     }
 
     /**
@@ -44,7 +38,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public boolean checkPassword(Long id, String p) {
-        return accountMapper.getAccountById(id).getPassword().equals(p);
+        return userMapper.getAccountById(id).getPassword().equals(p);
     }
 
     /**
@@ -53,7 +47,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public Student sInfo(long id) {
-        return studentMapper.info(id);
+        return userMapper.studentInfo(id);
     }
 
     /**
@@ -61,7 +55,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void sChangeInfo(Student student) {
-        studentMapper.changeInfo(student);
+        userMapper.studentChangeInfo(student);
     }
 
     /**
@@ -70,7 +64,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public Teacher tInfo(Long id) {
-        return teacherMapper.info(id);
+        return userMapper.teacherInfo(id);
     }
 
     /**
@@ -78,7 +72,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void tChangeInfo(Teacher teacher) {
-        teacherMapper.changeInfo(teacher);
+        userMapper.teacherChangeInfo(teacher);
     }
 
     /**
@@ -87,7 +81,29 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void addTeacher(TeacherAccount teacher) {
-        accountMapper.addAccount(new Account(teacher));
-        teacherMapper.add(new Teacher(teacher));
+        userMapper.addAccount(new Account(teacher));
+        userMapper.addTeacher(new Teacher(teacher));
+    }
+
+    /**
+     * @param id
+     */
+    @Override
+    public void delAccount(Long id) {
+        userMapper.delAccount(id);
+    }
+
+    /**
+     * @param aid
+     * @return
+     */
+    @Override
+    public Object getUserInfo(Long aid) {
+        Account account = userMapper.getAccountById(aid);
+        return switch (account.getRole()) {
+            case "student" -> userMapper.studentInfo(aid);
+            case "teacher" -> userMapper.teacherInfo(aid);
+            default -> null;
+        };
     }
 }

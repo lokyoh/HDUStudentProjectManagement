@@ -21,11 +21,11 @@ public class Account {
     public Account(StudentAccount studentAccount) {
         this.username = studentAccount.getStudentId();
         this.password = studentAccount.getPassword();
-        this.role = "学生";
+        this.role = "student";
     }
     public Account(TeacherAccount teacherAccount) {
         this.username = teacherAccount.getTeacherId();
         this.password = teacherAccount.getPassword();
-        this.role = "教师";
+        this.role = "teacher";
     }
 }

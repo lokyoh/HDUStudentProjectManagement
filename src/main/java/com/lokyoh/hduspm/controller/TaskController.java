@@ -22,6 +22,7 @@ public class TaskController {
 
     @GetMapping("/list")
     public Result<PageBean<STask>> list(
+            @RequestParam Long pId,
             @RequestParam(required = false) Integer pageNum,
             @RequestParam(required = false) Integer pageSize,
             @RequestParam(required = false) String name,
@@ -30,11 +31,18 @@ public class TaskController {
             @RequestParam(required = false) String status
     ) {
         Map<String, Object> map = ThreadLocalUtil.get();
-        long id = Long.parseLong(map.get("id").toString());
+        Long id = Long.parseLong(map.get("id").toString());
         pageNum = pageNum == null || pageNum < 1 ? 1 : pageNum;
         pageSize = pageSize == null || pageSize > 30 || pageSize < 1 ? 10 : pageSize;
         PageBean<STask> pb = taskService.sList(pageNum, pageSize, id, name, assignedTo, dueDate, status);
         return Result.success(pb);
+    }
+
+    @GetMapping("/project/{id}")
+    public Result<Object> pList(@PathVariable Long id) {
+        Map<String, Object> map = ThreadLocalUtil.get();
+        Long uid = Long.parseLong(map.get("id").toString());
+        return Result.success(taskService.pList(id, uid));
     }
 
     @PutMapping("/create")

@@ -11,7 +11,7 @@ CREATE TABLE accounts (
     id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '账号ID（唯一标识）',
     username VARCHAR(32) NOT NULL UNIQUE COMMENT '登录用户名',
     password VARCHAR(32) NOT NULL COMMENT '密码',
-    role ENUM('学生', '教师', '管理员') NOT NULL COMMENT '用户角色（学生/教师/管理员）',
+    role ENUM('student', 'teacher', 'admin') NOT NULL COMMENT '用户角色（学生/教师/管理员）',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='账号表，存储所有用户的登录信息与权限';
 
@@ -68,8 +68,9 @@ CREATE TABLE projects (
     name VARCHAR(128) NOT NULL COMMENT '项目名称',
     description TEXT NULL COMMENT '项目描述',
     creator_id BIGINT NOT NULL COMMENT '创建者（学生ID）',
+    teacher_id BIGINT NULL COMMENT '指导教师（可为空）',
     class_id BIGINT NULL COMMENT '所属班级（可为空）',
-    status ENUM('进行中', '已完成', '已取消') NOT NULL DEFAULT '进行中' COMMENT '项目状态',
+    status ENUM('normal', 'finish', 'cancel') NOT NULL DEFAULT 'normal' COMMENT '项目状态',
     start_date DATE NOT NULL COMMENT '项目开始日期',
     end_date DATE NULL COMMENT '项目结束日期',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -82,7 +83,7 @@ DROP TABLE IF EXISTS project_members;
 CREATE TABLE project_members (
     project_id BIGINT NOT NULL COMMENT '项目ID',
     student_id BIGINT NOT NULL COMMENT '学生ID',
-    role ENUM('成员', '组长') NOT NULL DEFAULT '成员' COMMENT '学生在项目中的角色（成员或组长）',
+    role ENUM('member', 'leader') NOT NULL DEFAULT 'member' COMMENT '学生在项目中的角色（成员或组长）',
     joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '加入时间',
     PRIMARY KEY (project_id, student_id),
     FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
@@ -98,7 +99,7 @@ CREATE TABLE tasks (
     description TEXT NULL COMMENT '任务描述',
     assigned_to BIGINT NOT NULL COMMENT '任务负责人（学生ID）',
     due_date DATE NULL COMMENT '任务截止日期',
-    status ENUM('未开始', '进行中', '已完成', '已取消') NOT NULL DEFAULT '未开始' COMMENT '任务状态',
+    status ENUM('plane', 'normal', 'finish', 'cancel') NOT NULL DEFAULT 'plane' COMMENT '任务状态',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '任务创建时间',
     FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
     FOREIGN KEY (assigned_to) REFERENCES students(id) ON DELETE CASCADE
@@ -109,7 +110,7 @@ DROP TABLE IF EXISTS task_members;
 CREATE TABLE task_members (
     task_id BIGINT NOT NULL COMMENT '任务ID',
     student_id BIGINT NOT NULL COMMENT '学生ID',
-    role ENUM('负责人', '成员') NOT NULL DEFAULT '成员' COMMENT '学生在任务中的角色（负责人或成员）',
+    role ENUM('leader', 'member') NOT NULL DEFAULT 'member' COMMENT '学生在任务中的角色（负责人或成员）',
     assigned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '分配时间',
     PRIMARY KEY (task_id, student_id),
     FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,
@@ -153,8 +154,8 @@ CREATE TABLE notifications (
     sender_id BIGINT NULL COMMENT '通知发送者ID（关联账号表）',
     receiver_id BIGINT NOT NULL COMMENT '通知接收者ID（关联账号表）',
     message TEXT NOT NULL COMMENT '通知内容',
-    type ENUM('系统', '管理员', '教师', '学生') NOT NULL DEFAULT '系统' COMMENT '通知类型',
-    status ENUM('未读', '已读', '已删除') NOT NULL DEFAULT '未读' COMMENT '通知状态',
+    type ENUM('system', 'admin', 'teacher', 'student') NOT NULL DEFAULT 'system' COMMENT '通知类型',
+    status ENUM('unread', 'read', 'delete') NOT NULL DEFAULT 'unread' COMMENT '通知状态',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '通知发送时间',
     read_at TIMESTAMP NULL COMMENT '通知阅读时间',
     FOREIGN KEY (sender_id) REFERENCES accounts(id) ON DELETE CASCADE,
@@ -167,7 +168,7 @@ CREATE TABLE reviews (
 id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '审核记录ID（唯一标识）',
 task_id BIGINT NOT NULL COMMENT '审核对象任务ID',
 auditor_id BIGINT NOT NULL COMMENT '审核人ID（关联教师表）',
-status ENUM('待审核', '审核通过', '审核未通过') DEFAULT '待审核' NOT NULL COMMENT '审核状态',
+status ENUM('pending', 'pass', 'fail') DEFAULT 'pending' NOT NULL COMMENT '审核状态',
 comments TEXT NULL COMMENT '审核意见（可选）',
 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '审核发起时间',
 reviewed_at TIMESTAMP NULL COMMENT '审核完成时间',
@@ -184,7 +185,7 @@ CREATE TABLE announcements (
     author_id BIGINT NOT NULL COMMENT '公告发布者ID（关联教师、管理员或系统用户）',
     start_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '公告发布开始时间',
     end_date TIMESTAMP NULL COMMENT '公告有效结束时间（可为空，表示永久有效）',
-    status ENUM('已发布', '已删除') NOT NULL DEFAULT '已发布' COMMENT '公告状态',
+    status ENUM('published', 'deleted') NOT NULL DEFAULT 'published' COMMENT '公告状态',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '公告创建时间',
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '公告最后更新时间',
     FOREIGN KEY (author_id) REFERENCES accounts(id) ON DELETE CASCADE
@@ -204,7 +205,7 @@ DROP TABLE IF EXISTS logs;
 CREATE TABLE logs (
 id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '日志ID（唯一标识）',
 account_id BIGINT NOT NULL COMMENT '操作用户的ID（关联账户表）',
-operation_type ENUM('登录', '操作', '错误', '系统') NOT NULL COMMENT '操作类型（登录、操作、错误、系统等）',
+operation_type ENUM('login', 'operation', 'error', 'system') NOT NULL COMMENT '操作类型（登录、操作、错误、系统等）',
 description TEXT NOT NULL COMMENT '日志描述，记录具体操作信息或错误信息',
 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '日志创建时间',
 FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE

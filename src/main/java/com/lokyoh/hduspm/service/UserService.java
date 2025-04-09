@@ -18,4 +18,8 @@ public interface UserService {
     void tChangeInfo(Teacher teacher);
 
     void addTeacher(TeacherAccount teacher);
+
+    void delAccount(Long id);
+
+    Object getUserInfo(Long aid);
 }

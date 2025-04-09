@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lokyoh.hduspm.mapper.UserMapper">
+    <select id="getAccountByName" resultType="com.lokyoh.hduspm.entity.Account">
+        select * from accounts
+        <where>
+            username=#{username}
+        </where>
+    </select>
+    <insert id="addAccount">
+        insert into accounts (
+            username,
+            password,
+            role
+        )
+            value (#{username}, #{password}, #{role})
+    </insert>
+    <select id="getAccountById" resultType="com.lokyoh.hduspm.entity.Account">
+        select * from accounts
+        <where>
+            id=#{id}
+        </where>
+    </select>
+    <insert id="addStudent">
+        insert into students (
+            account_id,
+            name,
+            student_id,
+            class_number,
+            email,
+            phone
+        )
+            value (
+                       (select id from accounts where username = #{studentId}),
+                       #{name},
+                       #{studentId},
+                       #{classNumber},
+                       #{email},
+                       #{phone}
+            )
+    </insert>
+    <select id="studentInfo" resultType="com.lokyoh.hduspm.entity.Student">
+        select
+        s.id,
+        s.account_id,
+        s.name,
+        s.student_id,
+        s.class_number,
+        s.email,
+        s.phone,
+        a.created_at
+        from students s
+        join accounts a ON s.account_id = a.id
+        <where>
+            a.id=#{id}
+        </where>
+    </select>
+    <update id="studentChangeInfo">
+        update accounts a
+        JOIN students s ON s.account_id = a.id
+        <set>
+            s.student_id=s.student_id
+            <if test="password!=null and password!=''">
+                , a.password=#{password}
+            </if>
+            <if test="classNumber!=null and classNumber!=''">
+                , s.class_number=#{classNumber}
+            </if>
+            <if test="email!=null and email!=''">
+                , s.email=#{email}
+            </if>
+            <if test="phone!=null and phone!=''">
+                , s.phone=#{phone}
+            </if>
+        </set>
+        <where>
+            a.id=#{accountId}
+        </where>
+    </update>
+    <insert id="addTeacher">
+        insert into teachers (
+            account_id,
+            name,
+            teacher_id,
+            email,
+            phone
+        )
+            value (
+                       (select id from accounts where username = #{teacherId}),
+                       #{name},
+                       #{teacherId},
+                       #{email},
+                       #{phone}
+            )
+    </insert>
+    <select id="teacherInfo" resultType="com.lokyoh.hduspm.entity.Teacher">
+        select
+        t.id,
+        t.account_id,
+        t.name,
+        t.teacher_id,
+        t.email,
+        t.phone,
+        a.created_at
+        from teachers t
+        join accounts a ON t.account_id = a.id
+        <where>
+            a.id=#{id}
+        </where>
+    </select>
+    <update id="teacherChangeInfo">
+        update accounts a
+        JOIN teachers t ON t.account_id = a.id
+        <set>
+            t.teacher_id=t.teacher_id
+            <if test="password!=null and password!=''">
+                , a.password=#{password}
+            </if>
+            <if test="email!=null and email!=''">
+                , t.email=#{email}
+            </if>
+            <if test="phone!=null and phone!=''">
+                , t.phone=#{phone}
+            </if>
+        </set>
+        <where>
+            a.id=#{accountId}
+        </where>
+    </update>
+    <delete id="delAccount">
+        delete from accounts where id=#{id}
+    </delete>
+    <select id="getStudentId" resultType="java.lang.Long">
+        select s.id
+        from students s
+        JOIN accounts a ON s.account_id = a.id
+        where a.id = #{id}
+    </select>
+</mapper>

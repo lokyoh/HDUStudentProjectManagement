@@ -4,9 +4,11 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lokyoh.hduspm.entity.*;
 import com.lokyoh.hduspm.mapper.ProjectMapper;
+import com.lokyoh.hduspm.mapper.UserMapper;
 import com.lokyoh.hduspm.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,6 +17,8 @@ import java.util.List;
 public class ProjectServiceImpl implements ProjectService {
     @Autowired
     private ProjectMapper projectMapper;
+    @Autowired
+    private UserMapper userMapper;
 
     /**
      * @param pageNum 页面数目
@@ -26,11 +30,11 @@ public class ProjectServiceImpl implements ProjectService {
      * @return 项目列表
      */
     @Override
-    public PageBean<SProject> sList(int pageNum, int pageSize, Long id, Long creatorId, Long classId, String status, String reviewStatus) {
-        PageBean<SProject> pb = new PageBean<>();
+    public PageBean<Project> sList(int pageNum, int pageSize, Long id, Long creatorId, Long classId, String status, String reviewStatus) {
+        PageBean<Project> pb = new PageBean<>();
         PageHelper.startPage(pageNum, pageSize);
-        List<SProject> rs = projectMapper.sList(id, creatorId, classId, status, reviewStatus);
-        PageInfo<SProject> p = new PageInfo<>(rs);
+        List<Project> rs = projectMapper.sList(id, creatorId, classId, status, reviewStatus);
+        PageInfo<Project> p = new PageInfo<>(rs);
         pb.setCount(p.getTotal());
         pb.setItems(p.getList());
         return pb;
@@ -41,17 +45,25 @@ public class ProjectServiceImpl implements ProjectService {
      * @return
      */
     @Override
-    public Project getProject(Long id) {
-        return projectMapper.getProject(id);
+    @Transactional
+    public Project getProject(Long id, Long uid) {
+        Project project = projectMapper.getProject(id);
+        if (project != null) {
+            project.setRole(projectMapper.getRole(id, uid));
+        }
+        return project;
     }
 
     /**
      * @param project
      */
     @Override
+    @Transactional
     public void create(BaseProject project) {
         project.setStartDate(LocalDate.now());
+        project.setCreatorId(userMapper.getStudentId(project.getCreatorId()));
         projectMapper.create(project);
+        projectMapper.addStudent(project.getId(), project.getCreatorId());
     }
 
     /**

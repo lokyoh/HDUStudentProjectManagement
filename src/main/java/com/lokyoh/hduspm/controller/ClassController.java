@@ -3,7 +3,6 @@ package com.lokyoh.hduspm.controller;
 import com.lokyoh.hduspm.entity.Classes;
 import com.lokyoh.hduspm.entity.PageBean;
 import com.lokyoh.hduspm.entity.Result;
-import com.lokyoh.hduspm.entity.SProject;
 import com.lokyoh.hduspm.service.ClassService;
 import com.lokyoh.hduspm.utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +17,11 @@ import java.util.Map;
 @RestController
 @RequestMapping("/class")
 @Component
-public class ClassesController {
+public class ClassController {
     @Autowired
     private ClassService classService;
 
-    @GetMapping("/list")
+    @GetMapping("/student/list")
     public Result<PageBean<Classes>> list(
             @RequestParam(required = false) Integer pageNum,
             @RequestParam(required = false) Integer pageSize
@@ -32,12 +31,12 @@ public class ClassesController {
         pageSize = pageSize == null || pageSize > 30 || pageSize < 1 ? 10 : pageSize;
         String role = map.get("role").toString();
         switch (role){
-            case "学生":
+            case "student":
                 PageBean<Classes> pb = classService.s_list(pageNum, pageSize, id);
                 return Result.success(pb);
-            case "教师":
+            case "teacher":
                 break;
-            case "管理员":
+            case "admin":
                 break;
         }
         return Result.error("null");

@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.lokyoh.hduspm.entity.BaseTask;
 import com.lokyoh.hduspm.entity.PageBean;
 import com.lokyoh.hduspm.entity.STask;
+import com.lokyoh.hduspm.entity.Task;
 import com.lokyoh.hduspm.mapper.TaskMapper;
 import com.lokyoh.hduspm.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,5 +62,14 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void addStudent(Long tid, Long sid) {
         taskMapper.addStudent(tid, sid);
+    }
+
+    /**
+     * @param id
+     * @return
+     */
+    @Override
+    public List<Task> pList(Long id, Long uid) {
+        return taskMapper.pList(id, uid);
     }
 }

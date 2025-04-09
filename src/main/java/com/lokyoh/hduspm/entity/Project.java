@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -15,10 +16,13 @@ public class Project{
     private String description;
     private Long creatorId;
     private String creatorName;
+    private Long teacherId;
+    private String teacherName;
     private Long classId;
     private String className;
     private String status;
-    private String reviewStatus;
     private LocalDate startDate;
     private LocalDate endDate;
+    private LocalDateTime createdAt;
+    private String role;
 }
