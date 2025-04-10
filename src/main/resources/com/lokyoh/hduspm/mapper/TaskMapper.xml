@@ -66,6 +66,6 @@
         LEFT JOIN students cs ON cs.id = t.assigned_to
         LEFT JOIN projects p ON p.id = t.project_id
         WHERE t.project_id=#{id}
-        ORDER BY t.created_at DESC
+        ORDER BY t.created_at
     </select>
 </mapper>

@@ -3,4 +3,12 @@
         PUBLIC "-//mybatis//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lokyoh.hduspm.mapper.FileMapper">
+    <select id="pList" resultType="com.lokyoh.hduspm.entity.PFile">
+        select
+            f.*,
+            s.name
+        from files f
+        join students s on f.student_id = s.id
+        where f.project_id = #{id}
+    </select>
 </mapper>

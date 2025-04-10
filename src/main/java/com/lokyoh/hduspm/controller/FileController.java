@@ -18,11 +18,6 @@ public class FileController {
 
     @GetMapping("/project/{id}")
     public Result<Object> getProjectList(@PathVariable Long id) {
-        List<String> s = new ArrayList<>();
-        s.add("1");
-        s.add("1");
-        s.add("1");
-        s.add("1");
-        return Result.success(s);
+        return Result.success(fileService.pList(id));
     }
 }

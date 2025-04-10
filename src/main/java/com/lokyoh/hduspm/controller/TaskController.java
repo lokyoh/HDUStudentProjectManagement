@@ -22,7 +22,6 @@ public class TaskController {
 
     @GetMapping("/list")
     public Result<PageBean<STask>> list(
-            @RequestParam Long pId,
             @RequestParam(required = false) Integer pageNum,
             @RequestParam(required = false) Integer pageSize,
             @RequestParam(required = false) String name,
