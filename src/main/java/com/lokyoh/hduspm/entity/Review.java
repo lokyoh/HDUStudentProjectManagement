@@ -4,21 +4,20 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BaseProject {
+public class Review {
     private Long id;
-    private String name;
-    private String description;
-    private Long creatorId;
-    private Long teacherId;
-    private Long classId;
+    private Long taskId;
+    private String taskName;
+    private Long projectId;
+    private String projectName;
+    private Long auditorId;
     private String status;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private String comments;
     private LocalDateTime createdAt;
+    private LocalDateTime reviewedAt;
 }

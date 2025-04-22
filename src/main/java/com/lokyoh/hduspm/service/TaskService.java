@@ -1,9 +1,6 @@
 package com.lokyoh.hduspm.service;
 
-import com.lokyoh.hduspm.entity.BaseTask;
-import com.lokyoh.hduspm.entity.PageBean;
-import com.lokyoh.hduspm.entity.STask;
-import com.lokyoh.hduspm.entity.Task;
+import com.lokyoh.hduspm.entity.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,4 +15,6 @@ public interface TaskService {
     void addStudent(Long tid, Long sid);
 
     List<Task> pList(Long id, Long uid);
+
+    TaskInfo getTask(Long id, Long uid);
 }

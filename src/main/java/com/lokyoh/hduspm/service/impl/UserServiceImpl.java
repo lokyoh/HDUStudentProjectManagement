@@ -106,4 +106,13 @@ public class UserServiceImpl implements UserService {
             default -> null;
         };
     }
+
+    /**
+     * @param studentId
+     * @return
+     */
+    @Override
+    public Student getStudent(String studentId) {
+        return userMapper.getStudentInfoByStudentId(studentId);
+    }
 }

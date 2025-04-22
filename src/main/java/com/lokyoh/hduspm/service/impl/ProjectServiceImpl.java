@@ -30,11 +30,21 @@ public class ProjectServiceImpl implements ProjectService {
      * @return 项目列表
      */
     @Override
-    public PageBean<Project> sList(int pageNum, int pageSize, Long id, Long creatorId, Long classId, String status, String reviewStatus) {
-        PageBean<Project> pb = new PageBean<>();
+    public PageBean<ProjectStudent> list(int pageNum, int pageSize, Long id, Long creatorId, Long classId, String status, String reviewStatus, String role) {
         PageHelper.startPage(pageNum, pageSize);
-        List<Project> rs = projectMapper.sList(id, creatorId, classId, status, reviewStatus);
-        PageInfo<Project> p = new PageInfo<>(rs);
+        PageBean<ProjectStudent> pb = new PageBean<>();
+        List<ProjectStudent> rs;
+        switch (role) {
+            case "student":
+                rs = projectMapper.sList(id, creatorId, classId, status, reviewStatus);
+                break;
+            case "teacher":
+                rs = projectMapper.tList(id, creatorId, classId, status, reviewStatus);
+                break;
+            default:
+                return null;
+        }
+        PageInfo<ProjectStudent> p = new PageInfo<>(rs);
         pb.setCount(p.getTotal());
         pb.setItems(p.getList());
         return pb;
@@ -46,12 +56,13 @@ public class ProjectServiceImpl implements ProjectService {
      */
     @Override
     @Transactional
-    public Project getProject(Long id, Long uid) {
-        Project project = projectMapper.getProject(id);
-        if (project != null) {
-            project.setRole(projectMapper.getRole(id, uid));
+    public ProjectStudent getProject(Long id, Long uid) {
+        ProjectStudent projectStudent = projectMapper.getProject(id);
+        if (projectStudent != null) {
+            if (uid!=null) projectStudent.setRole(projectMapper.getRole(id, uid));
+            else projectStudent.setRole("visitor");
         }
-        return project;
+        return projectStudent;
     }
 
     /**
@@ -61,7 +72,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional
     public void create(BaseProject project) {
         project.setStartDate(LocalDate.now());
-        project.setCreatorId(userMapper.getStudentId(project.getCreatorId()));
+        project.setCreatorId(userMapper.studentInfo(project.getCreatorId()).getId());
         projectMapper.create(project);
         projectMapper.addStudent(project.getId(), project.getCreatorId());
     }
@@ -88,7 +99,7 @@ public class ProjectServiceImpl implements ProjectService {
      * @return
      */
     @Override
-    public List<ProjectMember> getProjectMembers(Long id) {
+    public List<Member> getProjectMembers(Long id) {
         return projectMapper.getProjectMembers(id);
     }
 }

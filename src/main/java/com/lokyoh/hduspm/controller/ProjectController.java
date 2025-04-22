@@ -17,21 +17,26 @@ public class ProjectController {
     @Autowired
     private ProjectService projectService;
 
-    @GetMapping("/student/list")
-    public Result<PageBean<Project>> list(
+    @GetMapping("/list")
+    public Result<Object> list(
             @RequestParam(required = false) Integer pageNum,
             @RequestParam(required = false) Integer pageSize,
             @RequestParam(required = false) Long creatorId,
             @RequestParam(required = false) Long classId,
             @RequestParam(required = false) String status,
-            @RequestParam(required = false) String reviewStatus
+            @RequestParam(required = false) String reviewStatus,
+            @RequestHeader(value = "Authorization", defaultValue = "") String token
     ) {
-        Map<String, Object> map = ThreadLocalUtil.get();
-        Long id = Long.parseLong(map.get("id").toString());
-        pageNum = pageNum == null || pageNum < 1 ? 1 : pageNum;
-        pageSize = pageSize == null || pageSize > 30 || pageSize < 1 ? 10 : pageSize;
-        PageBean<Project> pb = projectService.sList(pageNum, pageSize, id, creatorId, classId, status, reviewStatus);
-        return Result.success(pb);
+        if(!token.isEmpty()) {
+            Map<String, Object> map = JwtUtil.parseToken(token);
+            Long uid = Long.parseLong(map.get("id").toString());
+            pageNum = pageNum == null || pageNum < 1 ? 1 : pageNum;
+            pageSize = pageSize == null || pageSize > 30 || pageSize < 1 ? 10 : pageSize;
+            String role = map.get("role").toString();
+            PageBean<ProjectStudent> pb = projectService.list(pageNum, pageSize, uid, creatorId, classId, status, reviewStatus, role);
+            return Result.success(pb);
+        }
+        return Result.error("no permission");
     }
 
     @PutMapping("/student/create")
@@ -63,9 +68,7 @@ public class ProjectController {
         Long uid = null;
         if(!token.isEmpty()) {
             Map<String, Object> map = JwtUtil.parseToken(token);
-            if (map.get("role").equals("student")) {
-                uid = Long.parseLong(map.get("id").toString());
-            }
+            uid = Long.parseLong(map.get("id").toString());
         }
         return Result.success(projectService.getProject(id, uid));
     }
@@ -73,15 +76,5 @@ public class ProjectController {
     @GetMapping("/members/{id}")
     public Result<Object> member(@PathVariable Long id){
         return Result.success(projectService.getProjectMembers(id));
-    }
-
-    @GetMapping("/list")
-    public Result<Object> list(
-            @RequestParam(required = false) Integer pageNum,
-            @RequestParam(required = false) Integer pageSize
-    ){
-        pageNum = pageNum == null || pageNum < 1 ? 1 : pageNum;
-        pageSize = pageSize == null || pageSize > 30 || pageSize < 1 ? 10 : pageSize;
-        return Result.success();
     }
 }

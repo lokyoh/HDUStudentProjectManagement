@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Project{
+public class ProjectStudent {
     private Long id;
     private String name;
     private String description;

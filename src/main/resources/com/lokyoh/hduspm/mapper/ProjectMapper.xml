@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lokyoh.hduspm.mapper.ProjectMapper">
-    <select id="sList" resultType="com.lokyoh.hduspm.entity.Project">
+    <select id="sList" resultType="com.lokyoh.hduspm.entity.ProjectStudent">
         SELECT
             p.id,
             p.name,
@@ -40,13 +40,13 @@
         </where>
         ORDER BY p.created_at DESC
     </select>
-    <select id="getProjectMembers" resultType="com.lokyoh.hduspm.entity.ProjectMember">
+    <select id="getProjectMembers" resultType="com.lokyoh.hduspm.entity.Member">
         SELECT pm.student_id, s.name, pm.role
         FROM project_members pm
         JOIN students s ON pm.student_id = s.id
         WHERE pm.project_id=#{id}
     </select>
-    <select id="getProject" resultType="com.lokyoh.hduspm.entity.Project">
+    <select id="getProject" resultType="com.lokyoh.hduspm.entity.ProjectStudent">
         SELECT
             p.id,
             p.name,
@@ -83,4 +83,40 @@
         insert into project_members (project_id, student_id, role) VALUES
         (#{pid}, #{sid}, #{role})
     </insert>
+    <select id="getClassProjects" resultType="com.lokyoh.hduspm.entity.BaseProject">
+        select * from projects where class_id = #{id}
+    </select>
+    <select id="tList" resultType="com.lokyoh.hduspm.entity.ProjectStudent">
+        SELECT
+        p.id,
+        p.name,
+        p.description,
+        p.creator_id,
+        s.name AS creator_name,
+        p.teacher_id,
+        p.status,
+        p.class_id,
+        c.name AS class_name,
+        p.start_date,
+        p.end_date,
+        p.created_at
+        FROM projects p
+        JOIN teachers t ON p.teacher_id = t.id
+        JOIN accounts a ON t.account_id = a.id
+        JOIN students s ON p.creator_id = s.id
+        JOIN classes c ON p.class_id = c.id
+        <where>
+            a.id=#{id}
+            <if test="creatorId!=null">
+                and p.creator_id=#{creatorId}
+            </if>
+            <if test="classId!=null">
+                and p.class_id=#{classId}
+            </if>
+            <if test="status!=null and status!=''">
+                and p.status=#{status}
+            </if>
+        </where>
+        ORDER BY p.created_at DESC
+    </select>
 </mapper>

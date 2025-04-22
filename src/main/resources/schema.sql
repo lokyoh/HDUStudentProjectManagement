@@ -44,6 +44,7 @@ DROP TABLE IF EXISTS classes;
 CREATE TABLE classes (
     id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '班级ID（唯一标识）',
     name VARCHAR(64) NOT NULL COMMENT '班级名称',
+    description TEXT NULL COMMENT '班级介绍',
     teacher_id BIGINT NOT NULL COMMENT '关联教师ID',
     semester VARCHAR(8) NOT NULL COMMENT '学期',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

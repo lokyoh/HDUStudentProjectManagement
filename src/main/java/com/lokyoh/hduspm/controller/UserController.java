@@ -143,4 +143,9 @@ public class UserController {
         userService.delAccount(id);
         return Result.success();
     }
+
+    @GetMapping("/student/get")
+    public Result<Object> studentGet(@RequestParam String studentId){
+        return Result.success(userService.getStudent(studentId));
+    }
 }

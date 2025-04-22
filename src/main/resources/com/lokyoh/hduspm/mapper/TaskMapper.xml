@@ -68,4 +68,35 @@
         WHERE t.project_id=#{id}
         ORDER BY t.created_at
     </select>
+    <select id="getTask" resultType="com.lokyoh.hduspm.entity.BaseTask">
+        select
+            t.id,
+            t.project_id,
+            t.name,
+            t.description,
+            t.assigned_to,
+            t.due_date,
+            t.status,
+            tm.role,
+            t.created_at
+        from tasks t
+        join task_members tm on t.id = tm.task_id
+        where t.id = #{id}
+    </select>
+    <select id="getMembers" resultType="com.lokyoh.hduspm.entity.Member">
+        select
+            tm.role,
+            tm.student_id as id,
+            s.name
+        from task_members tm
+        join tasks t on tm.task_id = t.id
+        join students s on tm.student_id = s.id
+        where t.id = #{id}
+    </select>
+    <select id="getProgress" resultType="com.lokyoh.hduspm.entity.TaskProgress">
+        select
+            *
+        from task_progress
+        where task_id = #{id}
+    </select>
 </mapper>

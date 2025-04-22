@@ -3,4 +3,18 @@
         PUBLIC "-//mybatis//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lokyoh.hduspm.mapper.ReviewMapper">
+    <select id="getReviews" resultType="com.lokyoh.hduspm.entity.Review">
+        select * from reviews where task_id = #{id}
+    </select>
+    <select id="getTeacherReviews" resultType="com.lokyoh.hduspm.entity.Review">
+        select *, t.name as task_name, p.name as project_name, p.id as project_id from reviews r
+        join tasks t on r.task_id = t.id
+        join projects p on t.project_id = p.id
+        join teachers te on p.teacher_id = te.id
+        join accounts a on te.account_id = a.id
+        where a.id = #{id}
+    </select>
+    <select id="getReview" resultType="com.lokyoh.hduspm.entity.Review">
+        select * from reviews where id = #{id}
+    </select>
 </mapper>

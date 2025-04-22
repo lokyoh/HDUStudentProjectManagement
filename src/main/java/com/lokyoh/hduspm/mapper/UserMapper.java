@@ -27,5 +27,5 @@ public interface UserMapper {
 
     void delAccount(Long id);
 
-    Long getStudentId(Long id);
+    Student getStudentInfoByStudentId(String studentId);
 }

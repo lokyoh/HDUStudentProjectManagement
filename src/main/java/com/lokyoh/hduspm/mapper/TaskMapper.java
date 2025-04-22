@@ -1,8 +1,6 @@
 package com.lokyoh.hduspm.mapper;
 
-import com.lokyoh.hduspm.entity.BaseTask;
-import com.lokyoh.hduspm.entity.STask;
-import com.lokyoh.hduspm.entity.Task;
+import com.lokyoh.hduspm.entity.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.time.LocalDate;
@@ -19,4 +17,10 @@ public interface TaskMapper {
     void addStudent(Long tid, Long sid);
 
     List<Task> pList(Long id, Long uid);
+
+    BaseTask getTask(Long id);
+
+    List<Member> getMembers(Long id);
+
+    TaskProgress getProgress(Long id);
 }

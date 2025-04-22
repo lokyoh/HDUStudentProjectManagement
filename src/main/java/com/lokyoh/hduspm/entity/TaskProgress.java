@@ -4,20 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BaseTask {
+public class TaskProgress {
     private Long id;
-    private Long projectId;
-    private String name;
+    private Long taskId;
+    private Long studentId;
+    private Double progress;
     private String description;
-    private Long assignedTo;
-    private LocalDate dueDate;
-    private String status;
-    private String role;
-    private LocalDateTime createdAt;
+    private LocalDateTime updateAt;
 }

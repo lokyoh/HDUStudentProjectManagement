@@ -28,14 +28,15 @@ public class WebConfig implements WebMvcConfigurer {
                 "/teacher/**",
                 "/admin/**",
                 "/task/**",
-                "/class/student/**"
+                "/class/student/**",
+                "/review/**"
         );
         registry.addInterceptor(studentInterceptor).addPathPatterns(
                 "/student/**",
                 "/project/student/**",
                 "/task/**",
                 "/class/student/**"
-        );
+        ).excludePathPatterns("/task/get/**");
         registry.addInterceptor(teacherInterceptor).addPathPatterns(
                 "/teacher/**"
         );

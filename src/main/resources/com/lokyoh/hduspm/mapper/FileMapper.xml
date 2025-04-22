@@ -11,4 +11,12 @@
         join students s on f.student_id = s.id
         where f.project_id = #{id}
     </select>
+    <select id="tList" resultType="com.lokyoh.hduspm.entity.PFile">
+        select
+            f.*,
+            s.name
+        from files f
+        join students s on f.student_id = s.id
+        where f.task_id = #{id}
+    </select>
 </mapper>

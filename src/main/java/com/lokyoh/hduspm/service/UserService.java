@@ -22,4 +22,6 @@ public interface UserService {
     void delAccount(Long id);
 
     Object getUserInfo(Long aid);
+
+    Student getStudent(String studentId);
 }

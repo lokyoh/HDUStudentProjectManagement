@@ -12,6 +12,8 @@ import java.time.LocalDate;
 public class Classes {
     private Long id;
     private String name;
+    private String description;
+    private String semester;
     private Long teacherId;
     private String teacherName;
     private LocalDate createdAt;

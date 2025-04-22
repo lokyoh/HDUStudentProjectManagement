@@ -7,6 +7,8 @@
         SELECT
             c.id,
             c.name,
+            c.description,
+            c.semester,
             c.teacher_id,
             t.name AS teacher_name,
             c.created_at
@@ -15,6 +17,49 @@
         JOIN student_classes sc ON class_id = c.id
         JOIN students s ON s.id = sc.student_id
         JOIN accounts a ON a.id = s.account_id
+        <where>
+            a.id=#{id}
+        </where>
+        ORDER BY c.created_at DESC
+    </select>
+    <select id="getClasses" resultType="com.lokyoh.hduspm.entity.Classes">
+        SELECT
+        c.id,
+        c.name,
+        c.description,
+        c.semester,
+        c.teacher_id,
+        t.name AS teacher_name,
+        c.created_at
+        FROM classes c
+        JOIN teachers t ON c.teacher_id = t.id
+        <where>
+            c.id=#{id}
+        </where>
+    </select>
+    <select id="getMembers" resultType="com.lokyoh.hduspm.entity.Member">
+        SELECT
+        s.name,
+        s.id
+        FROM student_classes sc
+        JOIN classes c on sc.class_id = c.id
+        join students s on sc.student_id = s.id
+        <where>
+            c.id=#{id}
+        </where>
+    </select>
+    <select id="t_list" resultType="com.lokyoh.hduspm.entity.Classes">
+        SELECT
+        c.id,
+        c.name,
+        c.description,
+        c.semester,
+        c.teacher_id,
+        t.name AS teacher_name,
+        c.created_at
+        FROM classes c
+        JOIN teachers t ON c.teacher_id = t.id
+        JOIN accounts a ON a.id = t.account_id
         <where>
             a.id=#{id}
         </where>

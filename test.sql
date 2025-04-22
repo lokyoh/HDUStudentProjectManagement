@@ -9,8 +9,8 @@ VALUES (2, 'lokyoh', '21051431', '21052314', 'lokyoh@hotmail.com', '12112312312'
 INSERT INTO teachers (account_id, name, teacher_id, email, phone)
 VALUES (3, '张三', 't123456', 'zhangsan@lokyoh.com', '12345678912');
 
-INSERT INTO classes (name, teacher_id, semester)
-VALUES ('毕业设计S123', 1, '2025-1');
+INSERT INTO classes (name, teacher_id, semester, description)
+VALUES ('毕业设计S123', 1, '2025-1', '毕业设计S123');
 
 INSERT INTO student_classes (student_id, class_id)
 VALUES (1,1);
@@ -29,3 +29,6 @@ VALUES (1, 1, 'leader');
 
 INSERT INTO announcements (title, content, author_id)
 VALUES ('公告名称', '公告内容', 1);
+
+INSERT INTO reviews (task_id, auditor_id)
+VALUES (1, 1);

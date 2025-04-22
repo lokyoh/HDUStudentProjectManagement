@@ -132,10 +132,8 @@
     <delete id="delAccount">
         delete from accounts where id=#{id}
     </delete>
-    <select id="getStudentId" resultType="java.lang.Long">
-        select s.id
-        from students s
-        JOIN accounts a ON s.account_id = a.id
-        where a.id = #{id}
+    <select id="getStudentInfoByStudentId" resultType="com.lokyoh.hduspm.entity.Student">
+        select id, name, student_id, class_number
+        from students where student_id = #{studentId}
     </select>
 </mapper>

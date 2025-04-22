@@ -5,6 +5,7 @@ import com.lokyoh.hduspm.entity.PageBean;
 import com.lokyoh.hduspm.entity.Result;
 import com.lokyoh.hduspm.entity.STask;
 import com.lokyoh.hduspm.service.TaskService;
+import com.lokyoh.hduspm.utils.JwtUtil;
 import com.lokyoh.hduspm.utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -42,6 +43,17 @@ public class TaskController {
         Map<String, Object> map = ThreadLocalUtil.get();
         Long uid = Long.parseLong(map.get("id").toString());
         return Result.success(taskService.pList(id, uid));
+    }
+
+    @GetMapping("/get/{id}")
+    public Result<Object> getTask(@PathVariable Long id, @RequestHeader(value = "Authorization", defaultValue = "") String token) {
+        if(!token.isEmpty()) {
+            Map<String, Object> map = JwtUtil.parseToken(token);
+            Long uid = Long.parseLong(map.get("id").toString());
+            return Result.success(taskService.getTask(id, uid));
+        }else{
+            return Result.error("no permission");
+        }
     }
 
     @PutMapping("/create")
