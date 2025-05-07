@@ -65,4 +65,20 @@
         </where>
         ORDER BY c.created_at DESC
     </select>
+    <select id="list" resultType="com.lokyoh.hduspm.entity.Classes">
+        SELECT
+            c.id,
+            c.name,
+            c.description,
+            c.semester,
+            c.teacher_id,
+            t.name AS teacher_name,
+            c.created_at
+        FROM classes c
+        JOIN teachers t ON c.teacher_id = t.id
+        <where>
+            c.id != -1
+        </where>
+        ORDER BY c.created_at DESC
+    </select>
 </mapper>

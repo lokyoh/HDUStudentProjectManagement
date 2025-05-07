@@ -24,4 +24,6 @@ public interface UserService {
     Object getUserInfo(Long aid);
 
     Student getStudent(String studentId);
+
+    PageBean<Account> getUsers(int pageNum, int pageSize);
 }

@@ -16,4 +16,6 @@ public interface ProjectService {
     void addStudent(Long pId, Long sId);
 
     List<Member> getProjectMembers(Long id);
+
+    SearchParamsProject getSearchParams(Long uid, String role);
 }

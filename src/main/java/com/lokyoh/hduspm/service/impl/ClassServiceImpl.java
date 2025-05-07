@@ -42,6 +42,9 @@ public class ClassServiceImpl implements ClassService {
             case "teacher":
                 rs = classMapper.t_list(id);
                 break;
+            case "admin":
+                rs = classMapper.list();
+                break;
             default:
                 return null;
         }

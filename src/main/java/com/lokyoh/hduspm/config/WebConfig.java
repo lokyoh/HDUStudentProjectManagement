@@ -41,7 +41,8 @@ public class WebConfig implements WebMvcConfigurer {
                 "/teacher/**"
         );
         registry.addInterceptor(adminInterceptor).addPathPatterns(
-                "/admin/**"
+                "/admin/**",
+                "/project/admin/**"
         );
     }
 }

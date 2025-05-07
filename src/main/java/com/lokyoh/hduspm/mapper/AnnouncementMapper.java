@@ -8,4 +8,6 @@ import java.util.List;
 @Mapper
 public interface AnnouncementMapper {
     List<Announcement> list();
+
+    Announcement get(Integer id);
 }

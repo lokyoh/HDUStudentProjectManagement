@@ -94,6 +94,7 @@
         p.creator_id,
         s.name AS creator_name,
         p.teacher_id,
+        t.name AS teacher_name,
         p.status,
         p.class_id,
         c.name AS class_name,
@@ -118,5 +119,104 @@
             </if>
         </where>
         ORDER BY p.created_at DESC
+    </select>
+    <select id="list" resultType="com.lokyoh.hduspm.entity.ProjectStudent">
+        SELECT
+            p.id,
+            p.name,
+            p.description,
+            p.creator_id,
+            s.name AS creator_name,
+            p.teacher_id,
+            t.name AS teacher_name,
+            p.status,
+            p.class_id,
+            c.name AS class_name,
+            p.start_date,
+            p.end_date,
+            p.created_at
+        FROM projects p
+        JOIN teachers t ON p.teacher_id = t.id
+        JOIN students s ON p.creator_id = s.id
+        JOIN classes c ON p.class_id = c.id
+        <where>
+            p.id != -1
+            <if test="creatorId!=null">
+                and p.creator_id=#{creatorId}
+            </if>
+            <if test="classId!=null">
+                and p.class_id=#{classId}
+            </if>
+            <if test="status!=null and status!=''">
+                and p.status=#{status}
+            </if>
+        </where>
+        ORDER BY p.created_at DESC
+    </select>
+    <select id="getSCP" resultType="com.lokyoh.hduspm.entity.ParamClass">
+        select p.class_id, c.name as class_name
+        from projects p
+        join classes c on p.class_id = c.id
+        JOIN project_members pm ON pm.project_id = p.id
+        JOIN students s ON pm.student_id = s.id
+        JOIN accounts a ON s.account_id = a.id
+        where a.id = #{uid}
+        group by p.class_id
+    </select>
+    <select id="getTCP" resultType="com.lokyoh.hduspm.entity.ParamClass">
+        select p.class_id, c.name as class_name
+        from projects p
+        join classes c on p.class_id = c.id
+        JOIN teachers t ON p.teacher_id = t.id
+        JOIN accounts a ON t.account_id = a.id
+        where a.id = #{uid}
+        group by p.class_id
+    </select>
+    <select id="getCP" resultType="com.lokyoh.hduspm.entity.ParamClass">
+        select p.class_id, c.name as class_name
+        from projects p
+        join classes c on p.class_id = c.id
+        group by p.class_id
+    </select>
+    <select id="getSSP" resultType="com.lokyoh.hduspm.entity.ParamCreator">
+        select p.creator_id, s.name as creator_name
+        from projects p
+        join students s on p.creator_id = s.id
+        JOIN project_members pm ON pm.project_id = p.id
+        JOIN students s2 ON pm.student_id = s2.id
+        JOIN accounts a ON s2.account_id = a.id
+        where a.id = #{uid}
+        group by p.creator_id
+    </select>
+    <select id="getTSP" resultType="com.lokyoh.hduspm.entity.ParamCreator">
+        select p.creator_id, s.name as creator_name
+        from projects p
+                 join students s on p.creator_id = s.id
+                 JOIN teachers t ON p.teacher_id = t.id
+                 JOIN accounts a ON t.account_id = a.id
+        where a.id = #{uid}
+        group by p.creator_id
+    </select>
+    <select id="getSP" resultType="com.lokyoh.hduspm.entity.ParamCreator">
+        select p.creator_id, s.name as creator_name
+        from projects p
+                 join students s on p.creator_id = s.id
+        group by p.creator_id
+    </select>
+    <select id="getSTP" resultType="com.lokyoh.hduspm.entity.ParamTeacher">
+        select p.teacher_id, t.name as teacher_name
+        from projects p
+        join teachers t on p.teacher_id = t.id
+        JOIN project_members pm ON pm.project_id = p.id
+        JOIN students s ON pm.student_id = s.id
+        JOIN accounts a ON s.account_id = a.id
+        where a.id = #{uid}
+        group by p.teacher_id
+    </select>
+    <select id="getTP" resultType="com.lokyoh.hduspm.entity.ParamTeacher">
+        select p.teacher_id, t.name as teacher_name
+        from projects p
+                 join teachers t on p.teacher_id = t.id
+        group by p.teacher_id
     </select>
 </mapper>

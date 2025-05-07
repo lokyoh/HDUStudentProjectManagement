@@ -7,7 +7,17 @@
         select * from reviews where task_id = #{id}
     </select>
     <select id="getTeacherReviews" resultType="com.lokyoh.hduspm.entity.Review">
-        select *, t.name as task_name, p.name as project_name, p.id as project_id from reviews r
+        select r.id,
+               r.task_id,
+               t.name as task_name,
+               p.id as project_id,
+               p.name as project_name,
+               r.auditor_id,
+               r.status,
+               r.comments,
+               r.created_at,
+               r.reviewed_at
+        from reviews r
         join tasks t on r.task_id = t.id
         join projects p on t.project_id = p.id
         join teachers te on p.teacher_id = te.id
@@ -15,6 +25,20 @@
         where a.id = #{id}
     </select>
     <select id="getReview" resultType="com.lokyoh.hduspm.entity.Review">
-        select * from reviews where id = #{id}
+        select r.id,
+               r.task_id,
+               t.name as task_name,
+               p.id as project_id,
+               p.name as project_name,
+               r.auditor_id,
+               r.status,
+               r.comments,
+               r.created_at,
+               r.reviewed_at
+        from reviews r
+        join tasks t on r.task_id = t.id
+        join projects p on t.project_id = p.id
+        join teachers te on p.teacher_id = te.id
+        where r.id = #{id}
     </select>
 </mapper>

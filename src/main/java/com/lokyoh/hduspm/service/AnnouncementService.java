@@ -5,4 +5,6 @@ import com.lokyoh.hduspm.entity.PageBean;
 
 public interface AnnouncementService {
     PageBean<Announcement> list(Integer pageNum, Integer pageSize);
+
+    Announcement get(Integer id);
 }

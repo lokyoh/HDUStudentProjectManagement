@@ -1,9 +1,12 @@
 package com.lokyoh.hduspm.mapper;
 
 import com.lokyoh.hduspm.entity.Account;
+import com.lokyoh.hduspm.entity.PageBean;
 import com.lokyoh.hduspm.entity.Student;
 import com.lokyoh.hduspm.entity.Teacher;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 @Mapper
 public interface UserMapper {
@@ -28,4 +31,6 @@ public interface UserMapper {
     void delAccount(Long id);
 
     Student getStudentInfoByStudentId(String studentId);
+
+    List<Account> getUsers();
 }

@@ -136,4 +136,7 @@
         select id, name, student_id, class_number
         from students where student_id = #{studentId}
     </select>
+    <select id="getUsers" resultType="com.lokyoh.hduspm.entity.Account">
+        select id, username, role, created_at from accounts order by created_at
+    </select>
 </mapper>

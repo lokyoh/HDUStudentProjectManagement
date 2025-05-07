@@ -8,4 +8,9 @@
         where status = 'published' and NOW() >= start_date and ( end_date is null or end_date >= NOW())
         ORDER BY updated_at DESC
     </select>
+    <select id="get" resultType="com.lokyoh.hduspm.entity.Announcement">
+        select * from announcements
+        where id = #{id}
+        ORDER BY updated_at DESC
+    </select>
 </mapper>

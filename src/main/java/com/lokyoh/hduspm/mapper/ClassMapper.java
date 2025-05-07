@@ -15,4 +15,6 @@ public interface ClassMapper {
     List<Member> getMembers(Long id);
 
     List<Classes> t_list(Long id);
+
+    List<Classes> list();
 }

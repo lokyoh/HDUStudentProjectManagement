@@ -39,6 +39,17 @@ public class ProjectController {
         return Result.error("no permission");
     }
 
+    @GetMapping("/search/params")
+    public Result<Object> searchParams(@RequestHeader(value = "Authorization", defaultValue = "") String token){
+        if(!token.isEmpty()) {
+            Map<String, Object> map = JwtUtil.parseToken(token);
+            Long uid = Long.parseLong(map.get("id").toString());
+            String role = map.get("role").toString();
+            return Result.success(projectService.getSearchParams(uid, role));
+        }
+        return Result.error("no permission");
+    }
+
     @PutMapping("/student/create")
     public Result<Object> create(@RequestBody BaseProject project){
         Map<String, Object> map = ThreadLocalUtil.get();

@@ -1,11 +1,15 @@
 package com.lokyoh.hduspm.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.lokyoh.hduspm.entity.*;
 import com.lokyoh.hduspm.mapper.UserMapper;
 import com.lokyoh.hduspm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -114,5 +118,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public Student getStudent(String studentId) {
         return userMapper.getStudentInfoByStudentId(studentId);
+    }
+
+    /**
+     * @return
+     */
+    @Override
+    public PageBean<Account> getUsers(int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        PageBean<Account> pb = new PageBean<>();
+        List<Account> rs =userMapper.getUsers();
+        PageInfo<Account> p = new PageInfo<>(rs);
+        pb.setCount(p.getTotal());
+        pb.setItems(p.getList());
+        return pb;
     }
 }

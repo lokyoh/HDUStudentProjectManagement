@@ -31,4 +31,13 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         pageBean.setItems(pageInfo.getList());
         return pageBean;
     }
+
+    /**
+     * @param id
+     * @return
+     */
+    @Override
+    public Announcement get(Integer id) {
+        return announcementMapper.get(id);
+    }
 }
