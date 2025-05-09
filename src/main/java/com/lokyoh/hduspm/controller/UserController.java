@@ -158,4 +158,14 @@ public class UserController {
         pageSize = pageSize == null || pageSize > 30 || pageSize < 1 ? 10 : pageSize;
         return Result.success(userService.getUsers(pageNum, pageSize));
     }
+
+    @GetMapping("/user/teacher/param")
+    public Result<Object> teacherParam(@RequestParam String teacher){
+        return Result.success(userService.getTeachers(teacher));
+    }
+
+    @GetMapping("/user/student/param")
+    public Result<Object> studentParam(@RequestParam String param){
+        return Result.success(userService.getStudents(param));
+    }
 }

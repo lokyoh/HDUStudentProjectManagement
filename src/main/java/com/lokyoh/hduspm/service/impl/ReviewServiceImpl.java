@@ -61,4 +61,25 @@ public class ReviewServiceImpl implements ReviewService {
         }
         return null;
     }
+
+    /**
+     * @param id
+     */
+    @Override
+    public void newReview(Long id, Long tid) {
+        reviewMapper.newReview(id, tid);
+    }
+
+    /**
+     * @param id
+     */
+    @Override
+    public void delReview(Long id) {
+        reviewMapper.delReview(id);
+    }
+
+    @Override
+    public void check(Review review) {
+        reviewMapper.check(review);
+    }
 }

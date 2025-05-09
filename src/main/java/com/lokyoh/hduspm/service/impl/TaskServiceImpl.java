@@ -7,6 +7,7 @@ import com.lokyoh.hduspm.mapper.*;
 import com.lokyoh.hduspm.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -49,8 +50,10 @@ public class TaskServiceImpl implements TaskService {
      * @param task
      */
     @Override
+    @Transactional
     public void create(BaseTask task) {
         taskMapper.create(task);
+        taskMapper.addStudent(task.getId(), task.getAssignedTo(), "leader");
     }
 
     /**
@@ -67,7 +70,7 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     public void addStudent(Long tid, Long sid) {
-        taskMapper.addStudent(tid, sid);
+        taskMapper.addStudent(tid, sid, "member");
     }
 
     /**
@@ -98,17 +101,26 @@ public class TaskServiceImpl implements TaskService {
                 role = userMapper.getAccountById(uid).getRole();
             if (role.equals("teacher")) {
                 Long tid = projectMapper.getProject(id).getTeacherId();
-                if (!Objects.equals(tid, userMapper.teacherInfo(uid).getId())) return null;
+                if (!Objects.equals(tid, userMapper.teacherInfo(uid).getId())) {
+                    return null;
+                }else {
+                    taskInfo.setRole("teacher");
+                    return taskInfo;
+                }
             }else if (role.equals("student")) {
                 String pRole = projectMapper.getRole(task.getProjectId(), uid);
                 if (!pRole.equals("leader")) {
                     for (Member member: taskInfo.getMembers()) {
                         if (member.getId().equals(userMapper.studentInfo(uid).getId())) {
+                            taskInfo.setRole(member.getRole());
                             return taskInfo;
                         }
                     }
                     return null;
-                }else return taskInfo;
+                }else {
+                    taskInfo.setRole("leader");
+                    return taskInfo;
+                }
             }
             taskInfo.setRole("admin");
             return taskInfo;

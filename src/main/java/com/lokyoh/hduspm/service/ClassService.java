@@ -8,4 +8,6 @@ public interface ClassService {
     PageBean<Classes> list(Integer pageNum, Integer pageSize, Long id, String role);
 
     ClassesInfo getClassInfo(Long id, Long uid);
+
+    void addStudent(Long cid, Long sid);
 }

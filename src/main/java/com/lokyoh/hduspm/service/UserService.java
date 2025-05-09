@@ -2,6 +2,8 @@ package com.lokyoh.hduspm.service;
 
 import com.lokyoh.hduspm.entity.*;
 
+import java.util.List;
+
 public interface UserService {
     Account getAccountByName(String username);
 
@@ -26,4 +28,8 @@ public interface UserService {
     Student getStudent(String studentId);
 
     PageBean<Account> getUsers(int pageNum, int pageSize);
+
+    List<ParamUser> getTeachers(String teacher);
+
+    List<ParamUser> getStudents(String param);
 }

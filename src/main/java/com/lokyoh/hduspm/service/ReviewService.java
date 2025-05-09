@@ -9,4 +9,10 @@ public interface ReviewService {
     PageBean<Review> list(int pageNum, int pageSize, Long id);
 
     ReviewInfo getReview(Long id, Long uid);
+
+    void newReview(Long id, Long tid);
+
+    void delReview(Long id);
+
+    void check(Review review);
 }

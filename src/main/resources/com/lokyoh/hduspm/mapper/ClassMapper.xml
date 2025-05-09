@@ -81,4 +81,7 @@
         </where>
         ORDER BY c.created_at DESC
     </select>
+    <insert id="addStudent">
+        insert into student_classes (student_id, class_id) VALUES (#{sid}, #{cid})
+    </insert>
 </mapper>

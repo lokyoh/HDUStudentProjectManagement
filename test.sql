@@ -65,19 +65,28 @@ INSERT INTO classes (name, teacher_id, semester, description)
 VALUES ('毕业设计S123', 1, '2025-1', '毕业设计S123');
 
 INSERT INTO student_classes (student_id, class_id)
-VALUES (1,1);
+VALUES (1,1),
+       (2,1),
+       (3,1),
+       (4,1),
+       (5,1),
+       (6,1);
 
 INSERT INTO projects (name, description, creator_id, teacher_id, class_id, start_date)
 VALUES ('p1', 'p1-d', 1, 1, 1, '2025-03-14 16:28:45');
 
 INSERT INTO project_members (project_id, student_id, role)
-VALUES (1, 1, 'leader');
+VALUES (1, 1, 'leader'),
+       (1, 2, 'member'),
+       (1, 3, 'member'),
+       (1, 4, 'member');
 
 INSERT INTO tasks (project_id, name, description, assigned_to, due_date, status)
 VALUES (1, 't', 't-d', 1, NULL, 'normal');
 
 INSERT INTO task_members (task_id, student_id, role)
-VALUES (1, 1, 'leader');
+VALUES (1, 1, 'leader'),
+       (1, 3, 'member');
 
 INSERT INTO announcements (title, content, author_id)
 VALUES ('公告名称', '公告内容', 1);

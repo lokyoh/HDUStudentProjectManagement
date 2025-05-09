@@ -5,7 +5,7 @@ import com.lokyoh.hduspm.entity.*;
 import java.util.List;
 
 public interface ProjectService {
-    PageBean<ProjectStudent> list(int pageNum, int pageSize, Long id, Long creatorId, Long classId, String status, String reviewStatus, String role);
+    PageBean<ProjectStudent> list(int pageNum, int pageSize, Long id, Long creatorId, Long classId, String status, Long teacherId, String role);
 
     ProjectStudent getProject(Long id, Long uid);
 

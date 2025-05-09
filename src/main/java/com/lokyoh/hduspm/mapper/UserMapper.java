@@ -1,9 +1,6 @@
 package com.lokyoh.hduspm.mapper;
 
-import com.lokyoh.hduspm.entity.Account;
-import com.lokyoh.hduspm.entity.PageBean;
-import com.lokyoh.hduspm.entity.Student;
-import com.lokyoh.hduspm.entity.Teacher;
+import com.lokyoh.hduspm.entity.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -33,4 +30,8 @@ public interface UserMapper {
     Student getStudentInfoByStudentId(String studentId);
 
     List<Account> getUsers();
+
+    List<ParamUser> getTeachers(String teacher);
+
+    List<ParamUser> getStudents(String param);
 }

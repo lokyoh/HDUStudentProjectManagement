@@ -80,9 +80,7 @@ public class ClassServiceImpl implements ClassService {
                     break;
                 case "student":
                     classesInfo.setRole("visitor");
-                    System.out.println(userMapper.studentInfo(uid).getId());
                     for (Member member: classesInfo.getMembers()) {
-                        System.out.println(member.getId());
                         if (member.getId().equals(userMapper.studentInfo(uid).getId())) {
                             classesInfo.setRole("student");
                             break;
@@ -93,5 +91,14 @@ public class ClassServiceImpl implements ClassService {
             return classesInfo;
         }
         return null;
+    }
+
+    /**
+     * @param cid
+     * @param sid
+     */
+    @Override
+    public void addStudent(Long cid, Long sid) {
+        classMapper.addStudent(cid, sid);
     }
 }

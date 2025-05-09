@@ -10,7 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SearchParamsProject {
-    List<ParamCreator> creators;
-    List<ParamClass> classes;
-    List<ParamTeacher> teachers;
+    List<Param> creators;
+    List<Param> classes;
+    List<Param> teachers;
 }

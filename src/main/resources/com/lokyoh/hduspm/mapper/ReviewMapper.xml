@@ -41,4 +41,13 @@
         join teachers te on p.teacher_id = te.id
         where r.id = #{id}
     </select>
+    <insert id="newReview">
+        insert into reviews (task_id, auditor_id) values (#{id}, #{tid})
+    </insert>
+    <delete id="delReview">
+        delete from reviews where id = #{id}
+    </delete>
+    <update id="check">
+        update reviews set id=id, status=#{status}, comments=#{comments} where id=#{id}
+    </update>
 </mapper>

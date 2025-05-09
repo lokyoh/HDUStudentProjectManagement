@@ -17,4 +17,6 @@ public interface ClassMapper {
     List<Classes> t_list(Long id);
 
     List<Classes> list();
+
+    void addStudent(Long cid, Long sid);
 }

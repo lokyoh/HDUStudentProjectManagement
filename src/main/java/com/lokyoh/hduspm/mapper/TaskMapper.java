@@ -14,7 +14,7 @@ public interface TaskMapper {
 
     void change(BaseTask task);
 
-    void addStudent(Long tid, Long sid);
+    void addStudent(Long tId, Long sId, String role);
 
     List<Task> pList(Long id, Long uid);
 

@@ -139,4 +139,10 @@
     <select id="getUsers" resultType="com.lokyoh.hduspm.entity.Account">
         select id, username, role, created_at from accounts order by created_at
     </select>
+    <select id="getTeachers" resultType="com.lokyoh.hduspm.entity.ParamUser">
+        select id as uid, name, teacher_id as id from teachers where teacher_id=#{teacher} or name=#{teacher}
+    </select>
+    <select id="getStudents" resultType="com.lokyoh.hduspm.entity.ParamUser">
+        select id as uid, name, student_id as id from students where student_id=#{param} or name=#{param}
+    </select>
 </mapper>

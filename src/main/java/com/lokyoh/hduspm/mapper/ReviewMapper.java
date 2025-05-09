@@ -13,4 +13,10 @@ public interface ReviewMapper {
     List<Review> getTeacherReviews(Long id);
 
     Review getReview(Long id);
+
+    void newReview(Long id, Long tid);
+
+    void delReview(Long id);
+
+    void check(Review review);
 }

@@ -46,4 +46,10 @@ public class ClassController {
         }
         return Result.success(classService.getClassInfo(id, uid));
     }
+
+    @PostMapping("/add/student")
+    public Result<Object> addStudent(@RequestParam Long cid, @RequestParam Long sid) {
+        classService.addStudent(cid, sid);
+        return Result.success();
+    }
 }

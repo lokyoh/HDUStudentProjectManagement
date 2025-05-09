@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ParamClass {
-    private Long classId;
-    private String className;
+public class Param {
+    private Long id;
+    private String name;
 }

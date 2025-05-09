@@ -24,8 +24,8 @@
         JOIN students s ON pm.student_id = s.id
         JOIN accounts a ON s.account_id = a.id
         JOIN students cs ON p.creator_id = cs.id
-        JOIN classes c On p.class_id = c.id
-        JOIN teachers t ON p.teacher_id = t.id
+        LEFT JOIN classes c On p.class_id = c.id
+        LEFT JOIN teachers t ON p.teacher_id = t.id
         <where>
             a.id=#{id}
             <if test="creatorId!=null">
@@ -37,11 +37,14 @@
             <if test="status!=null and status!=''">
                 and p.status=#{status}
             </if>
+            <if test="teacherId!=null and teacherId!=''">
+                and p.teacher_id=#{teacherId}
+            </if>
         </where>
         ORDER BY p.created_at DESC
     </select>
     <select id="getProjectMembers" resultType="com.lokyoh.hduspm.entity.Member">
-        SELECT pm.student_id, s.name, pm.role
+        SELECT pm.student_id as id, s.name, pm.role
         FROM project_members pm
         JOIN students s ON pm.student_id = s.id
         WHERE pm.project_id=#{id}
@@ -63,7 +66,7 @@
             p.created_at
         FROM projects p
         JOIN students s ON p.creator_id = s.id
-        JOIN classes c ON p.class_id = c.id
+        LEFT JOIN classes c ON p.class_id = c.id
         LEFT JOIN teachers t ON p.teacher_id = t.id
         WHERE p.id=#{id}
     </select>
@@ -75,13 +78,13 @@
         JOIN accounts a On s.account_id = a.id
         WHERE pm.project_id=#{id} and a.id=#{uid}
     </select>
-    <insert id="newProject">
+    <insert id="create" useGeneratedKeys="true" keyProperty="id">
         insert into projects (name, description, creator_id, teacher_id, class_id, start_date) VALUES
         (#{name}, #{description}, #{creatorId}, #{teacherId}, #{classId}, #{startDate})
     </insert>
     <insert id="addStudent">
         insert into project_members (project_id, student_id, role) VALUES
-        (#{pid}, #{sid}, #{role})
+        (#{pId}, #{sId}, #{role})
     </insert>
     <select id="getClassProjects" resultType="com.lokyoh.hduspm.entity.BaseProject">
         select * from projects where class_id = #{id}
@@ -105,7 +108,7 @@
         JOIN teachers t ON p.teacher_id = t.id
         JOIN accounts a ON t.account_id = a.id
         JOIN students s ON p.creator_id = s.id
-        JOIN classes c ON p.class_id = c.id
+        LEFT JOIN classes c ON p.class_id = c.id
         <where>
             a.id=#{id}
             <if test="creatorId!=null">
@@ -136,9 +139,9 @@
             p.end_date,
             p.created_at
         FROM projects p
-        JOIN teachers t ON p.teacher_id = t.id
+        LEFT JOIN teachers t ON p.teacher_id = t.id
         JOIN students s ON p.creator_id = s.id
-        JOIN classes c ON p.class_id = c.id
+        LEFT JOIN classes c ON p.class_id = c.id
         <where>
             p.id != -1
             <if test="creatorId!=null">
@@ -150,11 +153,14 @@
             <if test="status!=null and status!=''">
                 and p.status=#{status}
             </if>
+            <if test="teacherId!=null and teacherId!=''">
+                and p.teacher_id=#{teacherId}
+            </if>
         </where>
         ORDER BY p.created_at DESC
     </select>
-    <select id="getSCP" resultType="com.lokyoh.hduspm.entity.ParamClass">
-        select p.class_id, c.name as class_name
+    <select id="getSCP" resultType="com.lokyoh.hduspm.entity.Param">
+        select p.class_id as id, c.name as name
         from projects p
         join classes c on p.class_id = c.id
         JOIN project_members pm ON pm.project_id = p.id
@@ -163,8 +169,8 @@
         where a.id = #{uid}
         group by p.class_id
     </select>
-    <select id="getTCP" resultType="com.lokyoh.hduspm.entity.ParamClass">
-        select p.class_id, c.name as class_name
+    <select id="getTCP" resultType="com.lokyoh.hduspm.entity.Param">
+        select p.class_id as id, c.name as name
         from projects p
         join classes c on p.class_id = c.id
         JOIN teachers t ON p.teacher_id = t.id
@@ -172,14 +178,14 @@
         where a.id = #{uid}
         group by p.class_id
     </select>
-    <select id="getCP" resultType="com.lokyoh.hduspm.entity.ParamClass">
-        select p.class_id, c.name as class_name
+    <select id="getCP" resultType="com.lokyoh.hduspm.entity.Param">
+        select p.class_id as id, c.name as name
         from projects p
         join classes c on p.class_id = c.id
         group by p.class_id
     </select>
-    <select id="getSSP" resultType="com.lokyoh.hduspm.entity.ParamCreator">
-        select p.creator_id, s.name as creator_name
+    <select id="getSSP" resultType="com.lokyoh.hduspm.entity.Param">
+        select p.creator_id as id, s.name as name
         from projects p
         join students s on p.creator_id = s.id
         JOIN project_members pm ON pm.project_id = p.id
@@ -188,8 +194,8 @@
         where a.id = #{uid}
         group by p.creator_id
     </select>
-    <select id="getTSP" resultType="com.lokyoh.hduspm.entity.ParamCreator">
-        select p.creator_id, s.name as creator_name
+    <select id="getTSP" resultType="com.lokyoh.hduspm.entity.Param">
+        select p.creator_id as id, s.name as name
         from projects p
                  join students s on p.creator_id = s.id
                  JOIN teachers t ON p.teacher_id = t.id
@@ -197,14 +203,14 @@
         where a.id = #{uid}
         group by p.creator_id
     </select>
-    <select id="getSP" resultType="com.lokyoh.hduspm.entity.ParamCreator">
-        select p.creator_id, s.name as creator_name
+    <select id="getSP" resultType="com.lokyoh.hduspm.entity.Param">
+        select p.creator_id as id, s.name as name
         from projects p
                  join students s on p.creator_id = s.id
         group by p.creator_id
     </select>
-    <select id="getSTP" resultType="com.lokyoh.hduspm.entity.ParamTeacher">
-        select p.teacher_id, t.name as teacher_name
+    <select id="getSTP" resultType="com.lokyoh.hduspm.entity.Param">
+        select p.teacher_id as id, t.name as name
         from projects p
         join teachers t on p.teacher_id = t.id
         JOIN project_members pm ON pm.project_id = p.id
@@ -213,10 +219,20 @@
         where a.id = #{uid}
         group by p.teacher_id
     </select>
-    <select id="getTP" resultType="com.lokyoh.hduspm.entity.ParamTeacher">
-        select p.teacher_id, t.name as teacher_name
+    <select id="getTP" resultType="com.lokyoh.hduspm.entity.Param">
+        select p.teacher_id as id, t.name as name
         from projects p
                  join teachers t on p.teacher_id = t.id
         group by p.teacher_id
     </select>
+    <update id="change">
+        update projects set id = id
+        <if test="name!=null and name!=''">
+            , name=#{name}
+        </if>
+        <if test="description!=null and description!=''">
+            , description=#{description}
+        </if>
+        where id = #{id}
+    </update>
 </mapper>

@@ -7,7 +7,7 @@ import java.util.List;
 
 @Mapper
 public interface ProjectMapper {
-    List<ProjectStudent> sList(Long id, Long creatorId, Long classId, String status, String reviewStatus);
+    List<ProjectStudent> sList(Long id, Long creatorId, Long classId, String status, Long teacherId);
 
     ProjectStudent getProject(Long id);
 
@@ -15,7 +15,7 @@ public interface ProjectMapper {
 
     void change(BaseProject project);
 
-    void addStudent(Long pId, Long sId);
+    void addStudent(Long pId, Long sId, String role);
 
     List<Member> getProjectMembers(Long id);
 
@@ -23,23 +23,23 @@ public interface ProjectMapper {
 
     List<BaseProject> getClassProjects(Long id);
 
-    List<ProjectStudent> tList(Long id, Long creatorId, Long classId, String status, String reviewStatus);
+    List<ProjectStudent> tList(Long id, Long creatorId, Long classId, String status, Long teacherId);
 
-    List<ProjectStudent> list(Long creatorId, Long classId, String status, String reviewStatus);
+    List<ProjectStudent> list(Long creatorId, Long classId, String status, Long teacherId);
 
-    List<ParamClass> getSCP(Long uid);
+    List<Param> getSCP(Long uid);
 
-    List<ParamTeacher> getSTP(Long uid);
+    List<Param> getSTP(Long uid);
 
-    List<ParamCreator> getSSP(Long uid);
+    List<Param> getSSP(Long uid);
 
-    List<ParamClass> getTCP(Long uid);
+    List<Param> getTCP(Long uid);
 
-    List<ParamCreator> getTSP(Long uid);
+    List<Param> getTSP(Long uid);
 
-    List<ParamCreator> getSP(Long uid);
+    List<Param> getSP(Long uid);
 
-    List<ParamClass> getCP(Long uid);
+    List<Param> getCP(Long uid);
 
-    List<ParamTeacher> getTP(Long uid);
+    List<Param> getTP(Long uid);
 }

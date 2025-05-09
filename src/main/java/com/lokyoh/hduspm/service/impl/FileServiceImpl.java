@@ -23,4 +23,12 @@ public class FileServiceImpl implements FileService {
     public PFile pList(Long id) {
         return fileMapper.pList(id);
     }
+
+    /**
+     *
+     */
+    @Override
+    public void addFile() {
+
+    }
 }

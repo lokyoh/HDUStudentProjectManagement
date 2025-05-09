@@ -133,4 +133,22 @@ public class UserServiceImpl implements UserService {
         pb.setItems(p.getList());
         return pb;
     }
+
+    /**
+     * @param teacher
+     * @return
+     */
+    @Override
+    public List<ParamUser> getTeachers(String teacher) {
+        return userMapper.getTeachers(teacher);
+    }
+
+    /**
+     * @param param
+     * @return
+     */
+    @Override
+    public List<ParamUser> getStudents(String param) {
+        return userMapper.getStudents(param);
+    }
 }

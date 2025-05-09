@@ -24,7 +24,7 @@ public class ProjectController {
             @RequestParam(required = false) Long creatorId,
             @RequestParam(required = false) Long classId,
             @RequestParam(required = false) String status,
-            @RequestParam(required = false) String reviewStatus,
+            @RequestParam(required = false) Long teacherId,
             @RequestHeader(value = "Authorization", defaultValue = "") String token
     ) {
         if(!token.isEmpty()) {
@@ -33,7 +33,7 @@ public class ProjectController {
             pageNum = pageNum == null || pageNum < 1 ? 1 : pageNum;
             pageSize = pageSize == null || pageSize > 30 || pageSize < 1 ? 10 : pageSize;
             String role = map.get("role").toString();
-            PageBean<ProjectStudent> pb = projectService.list(pageNum, pageSize, uid, creatorId, classId, status, reviewStatus, role);
+            PageBean<ProjectStudent> pb = projectService.list(pageNum, pageSize, uid, creatorId, classId, status, teacherId, role);
             return Result.success(pb);
         }
         return Result.error("no permission");
@@ -68,7 +68,7 @@ public class ProjectController {
         return Result.success();
     }
 
-    @PutMapping("/student/addMember")
+    @PostMapping("/student/addMember")
     public Result<Object> addStudent(@RequestParam Long pid, @RequestParam Long sid){
         projectService.addStudent(pid, sid);
         return Result.success();

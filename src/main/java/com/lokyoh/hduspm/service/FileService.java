@@ -4,4 +4,6 @@ import com.lokyoh.hduspm.entity.PFile;
 
 public interface FileService {
     PFile pList(Long id);
+
+    void addFile();
 }

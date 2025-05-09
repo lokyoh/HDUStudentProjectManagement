@@ -31,19 +31,19 @@ public class ProjectServiceImpl implements ProjectService {
      * @return 项目列表
      */
     @Override
-    public PageBean<ProjectStudent> list(int pageNum, int pageSize, Long id, Long creatorId, Long classId, String status, String reviewStatus, String role) {
+    public PageBean<ProjectStudent> list(int pageNum, int pageSize, Long id, Long creatorId, Long classId, String status, Long teacherId, String role) {
         PageHelper.startPage(pageNum, pageSize);
         PageBean<ProjectStudent> pb = new PageBean<>();
         List<ProjectStudent> rs;
         switch (role) {
             case "student":
-                rs = projectMapper.sList(id, creatorId, classId, status, reviewStatus);
+                rs = projectMapper.sList(id, creatorId, classId, status, teacherId);
                 break;
             case "teacher":
-                rs = projectMapper.tList(id, creatorId, classId, status, reviewStatus);
+                rs = projectMapper.tList(id, creatorId, classId, status, teacherId);
                 break;
             case "admin":
-                rs = projectMapper.list(creatorId, classId, status, reviewStatus);
+                rs = projectMapper.list(creatorId, classId, status, teacherId);
                 break;
             default:
                 return null;
@@ -78,7 +78,7 @@ public class ProjectServiceImpl implements ProjectService {
         project.setStartDate(LocalDate.now());
         project.setCreatorId(userMapper.studentInfo(project.getCreatorId()).getId());
         projectMapper.create(project);
-        projectMapper.addStudent(project.getId(), project.getCreatorId());
+        projectMapper.addStudent(project.getId(), project.getCreatorId(), "leader");
     }
 
     /**
@@ -95,7 +95,7 @@ public class ProjectServiceImpl implements ProjectService {
      */
     @Override
     public void addStudent(Long pId, Long sId) {
-        projectMapper.addStudent(pId, sId);
+        projectMapper.addStudent(pId, sId, "member");
     }
 
     /**

@@ -77,10 +77,8 @@
             t.assigned_to,
             t.due_date,
             t.status,
-            tm.role,
             t.created_at
         from tasks t
-        join task_members tm on t.id = tm.task_id
         where t.id = #{id}
     </select>
     <select id="getMembers" resultType="com.lokyoh.hduspm.entity.Member">
@@ -99,4 +97,22 @@
         from task_progress
         where task_id = #{id}
     </select>
+    <insert id="create" useGeneratedKeys="true" keyProperty="id">
+        insert into tasks (project_id, name, description, assigned_to)
+        values (#{projectId}, #{name}, #{description}, #{assignedTo})
+    </insert>
+    <insert id="addStudent">
+        insert into task_members (task_id, student_id, role)
+        VALUES (#{tId}, #{sId}, #{role})
+    </insert>
+    <update id="change">
+        update tasks set id = id
+        <if test="name!=null and name!=''">
+            , name=#{name}
+        </if>
+        <if test="description!=null and description!=''">
+            , description=#{description}
+        </if>
+        where id = #{id}
+    </update>
 </mapper>
